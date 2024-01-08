@@ -24,4 +24,7 @@ interface Scotch {
   dateCreated: Date;
 }
 
+type ScotchColumn = keyof Scotch;
+
 export default Scotch;
+export type { ScotchColumn };

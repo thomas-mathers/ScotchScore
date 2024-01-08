@@ -20,6 +20,8 @@ public class GetScotchesHttpTrigger(IQueryHandler<GetScotchesQuery, IReadOnlyLis
         var name = queryParams.GetValueOrDefault("name", string.Empty);
         var pageIndex = queryParams.GetInt("pageIndex", 0);
         var pageSize = queryParams.GetInt("pageSize", 100);
+        var sortBy = queryParams.GetValueOrDefault("sortBy", string.Empty);
+        var sortDirection = queryParams.GetValueOrDefault("sortDirection", string.Empty);
 
         var response = await queryHandler.Handle
         (
@@ -27,7 +29,9 @@ public class GetScotchesHttpTrigger(IQueryHandler<GetScotchesQuery, IReadOnlyLis
             {
                 Name = name,
                 PageIndex = pageIndex,
-                PageSize = pageSize
+                PageSize = pageSize,
+                SortBy = sortBy,
+                SortDirection = sortDirection
             },
             cancellationToken
         );

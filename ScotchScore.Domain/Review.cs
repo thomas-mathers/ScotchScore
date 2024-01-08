@@ -4,8 +4,8 @@ namespace ScotchScore.Domain
 {
     public class Review
     {
-        public Guid Id { get; } = Guid.NewGuid();
-        public Guid ScotchId { get; set; } = Guid.NewGuid();
+        public string Id { get; set; } = Guid.NewGuid().ToString();
+        public string ScotchId { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public decimal Rating { get; set; }
@@ -13,6 +13,6 @@ namespace ScotchScore.Domain
         public string UserProfilePictureUrl { get; set; } = string.Empty;
         public int Upvotes { get; set; }
         public int Downvotes { get; set; }
-        public DateTime DateCreated { get; } = DateTime.UtcNow;
+        public DateTime DateCreated { get; set; } = DateTime.UtcNow;
     }
 }

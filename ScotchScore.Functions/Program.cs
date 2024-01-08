@@ -1,3 +1,5 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Azure.Identity;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Configuration;
@@ -41,6 +43,15 @@ var host = hostBuilder
         services.ConfigureFunctionsApplicationInsights();
 
         services.AddHttpClient();
+        
+        services.Configure<JsonSerializerOptions>(options =>
+        {
+            options.AllowTrailingCommas = true;
+            options.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+            options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            options.PropertyNameCaseInsensitive = true;
+            options.Converters.Add(new JsonStringEnumConverter());
+        });
         
         services.AddApplication();
         

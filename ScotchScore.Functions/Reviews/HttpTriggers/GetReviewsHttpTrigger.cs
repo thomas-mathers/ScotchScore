@@ -11,9 +11,9 @@ public class GetReviewsHttpTrigger(IQueryHandler<GetReviewsQuery, IReadOnlyList<
 {
     [Function(nameof(GetReviewsHttpTrigger))]
     public async Task<IReadOnlyList<Review>> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "scotches/{scotchId:Guid}/reviews")]
+        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "scotches/{scotchId}/reviews")]
         HttpRequestData request,
-        Guid scotchId,
+        string scotchId,
         CancellationToken cancellationToken)
     {
         var queryParams = request.Query.ToDictionary();

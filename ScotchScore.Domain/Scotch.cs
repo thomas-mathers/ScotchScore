@@ -5,7 +5,7 @@ namespace ScotchScore.Domain
 {
     public class Scotch
     {
-        public Guid Id { get; } = Guid.NewGuid();
+        public string Id { get; set; } = Guid.NewGuid().ToString();
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public string Distillery { get; set; } = string.Empty;
@@ -13,7 +13,7 @@ namespace ScotchScore.Domain
         public int Age { get; set; }
         public decimal Amount { get; set; }
         public CurrencyCode Currency { get; set; }
-        public IReadOnlyList<string> Images = Array.Empty<string>();
+        public IReadOnlyList<string> Images { get; set; } = Array.Empty<string>();
         public int NumberOfOneStarReviews { get; set; }
         public int NumberOfTwoStarReviews { get; set; }
         public int NumberOfThreeStarReviews { get; set; }
@@ -21,6 +21,6 @@ namespace ScotchScore.Domain
         public int NumberOfFiveStarReviews { get; set; }
         public int NumberOfPositiveRecommendations { get; set; }
         public int NumberOfNegativeRecommendations { get; set; }
-        public DateTime DateCreated { get; } = DateTime.UtcNow;
+        public DateTime DateCreated { get; set; } = DateTime.UtcNow;
     }
 }

@@ -7,7 +7,7 @@ public class GetReviewsQuery
 {
     public int PageIndex { get; init; }
     public int PageSize { get; init; }
-    public Guid ScotchId { get; init; }
+    public string ScotchId { get; init; }
 }
 
 public class GetReviewsQueryHandler(IReviewRepository reviewRepository) 

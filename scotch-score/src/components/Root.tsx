@@ -5,15 +5,19 @@ import {
   Box,
   Link,
   Autocomplete,
+  TextField,
+  alpha,
+  InputAdornment,
+  CircularProgress,
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { Outlet } from "react-router-dom";
-import AutocompleteSearchBar from "./AutocompleteSearchBar";
 import Scotch from "../types/scotch";
 import { useQuery } from "@tanstack/react-query";
 import { getScotches } from "../services/scotchService";
 import { useState } from "react";
 import { useDebounce } from "react-use";
+import { Search } from "@mui/icons-material";
 
 function Root() {
   const [name, setName] = useState<string>("");
@@ -24,6 +28,7 @@ function Root() {
   const scotches = useQuery({
     queryKey: ["scotches", debouncedName],
     queryFn: () => getScotches(debouncedName),
+    placeholderData: [],
   });
 
   return (
@@ -44,13 +49,60 @@ function Root() {
           <Grid item xs={12} sm={6} lg={4}>
             <Autocomplete
               freeSolo
-              disableClearable
-              options={scotches.data || []}
+              size="small"
+              isOptionEqualToValue={(option: Scotch, value: Scotch) =>
+                option.id === value.id
+              }
               getOptionLabel={(option: string | Scotch) =>
                 typeof option === "string" ? option : option.name
               }
+              filterOptions={(x) => x}
               groupBy={(scotch) => scotch.region}
-              renderInput={AutocompleteSearchBar}
+              options={scotches.data ?? []}
+              loading={scotches.isLoading}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  sx={{
+                    borderRadius: "4px",
+                    backgroundColor: (theme) =>
+                      alpha(theme.palette.common.white, 0.15),
+                    "&:hover": {
+                      backgroundColor: (theme) =>
+                        alpha(theme.palette.common.white, 0.25),
+                    },
+                    "& .MuiInputBase-root": {
+                      color: "inherit",
+                    },
+                    "& .MuiInputAdornment-root": {
+                      color: "inherit",
+                    },
+                    "& .MuiIconButton-root": {
+                      color: "inherit",
+                    },
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      display: "none",
+                    },
+                  }}
+                  InputProps={{
+                    ...params.InputProps,
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Search />
+                      </InputAdornment>
+                    ),
+                    endAdornment: (
+                      <>
+                        {scotches.isLoading ? (
+                          <CircularProgress color="inherit" size={20} />
+                        ) : null}
+                        {params.InputProps.endAdornment}
+                      </>
+                    ),
+                  }}
+                  placeholder="Search..."
+                />
+              )}
               renderOption={(props, option) => (
                 <li {...props}>
                   <Link
@@ -64,7 +116,7 @@ function Root() {
                 </li>
               )}
               inputValue={name}
-              onInputChange={(event, value) => {
+              onInputChange={(_, value) => {
                 setName(value);
               }}
             />

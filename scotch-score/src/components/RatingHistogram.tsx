@@ -18,7 +18,7 @@ function RatingHistogram({ ratings }: RatingHistogramProps) {
             <Box flex="1">
               <LinearProgress
                 variant="determinate"
-                value={(rating / totalRatings) * 100}
+                value={totalRatings > 0 ? (rating / totalRatings) * 100 : 0}
               />
             </Box>
             <Box width="40px">{rating}</Box>

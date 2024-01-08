@@ -11,5 +11,6 @@ public static class ServiceCollectionExtensions
     {
         serviceCollection.AddScoped<IQueryHandler<GetReviewsQuery, IReadOnlyList<Review>>, GetReviewsQueryHandler>();
         serviceCollection.AddScoped<IQueryHandler<GetScotchesQuery, IReadOnlyList<Scotch>>, GetScotchesQueryHandler>();
+        serviceCollection.AddScoped<IQueryHandler<GetScotchQuery, Scotch?>, GetScotchQueryHandler>();
     }
 }

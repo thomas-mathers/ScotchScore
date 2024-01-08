@@ -5,7 +5,7 @@ namespace ScotchScore.Application.Scotches.Queries;
 
 public class GetScotchQuery
 {
-    public Guid ScotchId { get; init; }
+    public string ScotchId { get; init; } = string.Empty;
 }
 
 public class GetScotchQueryHandler(IScotchRepository scotchRepository) : IQueryHandler<GetScotchQuery, Scotch?>

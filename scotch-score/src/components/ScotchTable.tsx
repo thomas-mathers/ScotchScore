@@ -9,17 +9,31 @@ import {
   TableSortLabel,
   Paper,
   Box,
+  CircularProgress,
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { getScotches } from "../services/scotchService";
+import { ScotchColumn } from "../types/scotch";
+import { useState } from "react";
+import SortDirection from "../types/sortDirection";
 
 function ScotchTable() {
   const navigate = useNavigate();
+  const [sortBy, setSortBy] = useState<ScotchColumn>("name");
+  const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
   const scotches = useQuery({
-    queryKey: ["scotches"],
-    queryFn: () => getScotches(),
+    queryKey: ["scotches", sortBy, sortDirection],
+    queryFn: () => getScotches("", 0, 100, sortBy, sortDirection),
   });
+  const onClickSortHeader = (column: ScotchColumn) => {
+    if (column === sortBy) {
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      setSortBy(column);
+      setSortDirection("asc");
+    }
+  };
   return (
     <Box>
       <h1>Scotches</h1>
@@ -31,28 +45,85 @@ function ScotchTable() {
                 <TableCell
                   sx={{ display: { xs: "none", sm: "table-cell" } }}
                 ></TableCell>
-                <TableCell sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                  <TableSortLabel>Name</TableSortLabel>
+                <TableCell
+                  sx={{ display: { xs: "none", sm: "table-cell" } }}
+                  onClick={() => onClickSortHeader("name")}
+                >
+                  <TableSortLabel
+                    active={sortBy === "name"}
+                    direction={sortDirection}
+                  >
+                    Name
+                  </TableSortLabel>
                 </TableCell>
                 <TableCell
                   sx={{ display: { xs: "none", sm: "none", md: "table-cell" } }}
+                  onClick={() => onClickSortHeader("region")}
                 >
-                  <TableSortLabel>Region</TableSortLabel>
+                  <TableSortLabel
+                    active={sortBy === "region"}
+                    direction={sortDirection}
+                  >
+                    Region
+                  </TableSortLabel>
                 </TableCell>
                 <TableCell
                   sx={{ display: { xs: "none", sm: "none", md: "table-cell" } }}
+                  onClick={() => onClickSortHeader("age")}
                 >
-                  <TableSortLabel>Age</TableSortLabel>
+                  <TableSortLabel
+                    active={sortBy === "age"}
+                    direction={sortDirection}
+                  >
+                    Age
+                  </TableSortLabel>
                 </TableCell>
-                <TableCell sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                  <TableSortLabel>Price</TableSortLabel>
+                <TableCell
+                  sx={{ display: { xs: "none", sm: "table-cell" } }}
+                  onClick={() => onClickSortHeader("amount")}
+                >
+                  <TableSortLabel
+                    active={sortBy === "amount"}
+                    direction={sortDirection}
+                  >
+                    Amount
+                  </TableSortLabel>
                 </TableCell>
-                <TableCell sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                  <TableSortLabel>Rating</TableSortLabel>
+                <TableCell
+                  sx={{ display: { xs: "none", sm: "table-cell" } }}
+                  onClick={() => onClickSortHeader("averageRating")}
+                >
+                  <TableSortLabel
+                    active={sortBy === "averageRating"}
+                    direction={sortDirection}
+                  >
+                    Rating
+                  </TableSortLabel>
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
+              {scotches.isLoading && (
+                <TableRow>
+                  <TableCell colSpan={6} align="center">
+                    <CircularProgress />
+                  </TableCell>
+                </TableRow>
+              )}
+              {scotches.isError && (
+                <TableRow>
+                  <TableCell colSpan={6} align="center">
+                    Error loading scotches
+                  </TableCell>
+                </TableRow>
+              )}
+              {scotches.data?.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={6} align="center">
+                    No scotches found
+                  </TableCell>
+                </TableRow>
+              )}
               {scotches.data?.map((scotch) => (
                 <TableRow
                   key={scotch.id}
@@ -91,7 +162,7 @@ function ScotchTable() {
                     {scotch.amount}
                   </TableCell>
                   <TableCell sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                    <Rating value={scotch.averageRating} />
+                    <Rating value={scotch.averageRating} readOnly />
                   </TableCell>
                 </TableRow>
               ))}
