@@ -13,7 +13,7 @@ function RatingHistogram({ ratings }: RatingHistogramProps) {
         .slice()
         .reverse()
         .map((rating, i) => (
-          <Box display="flex" alignItems="center" gap={1}>
+          <Box display="flex" alignItems="center" gap={1} key={i}>
             <Box>{ratings.length - i} stars</Box>
             <Box flex="1">
               <LinearProgress

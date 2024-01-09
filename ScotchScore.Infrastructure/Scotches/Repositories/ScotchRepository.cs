@@ -7,26 +7,27 @@ namespace ScotchScore.Infrastructure.Scotches.Repositories;
 
 public class ScotchRepository(DatabaseContext databaseContext) : IScotchRepository
 {
-    private static Dictionary<string, Expression<Func<Scotch, object>>> SortByMapping { get; } = new(StringComparer.CurrentCultureIgnoreCase)
-    {
-        [nameof(Scotch.Name)] = scotch => scotch.Name,
-        [nameof(Scotch.Region)] = scotch => scotch.Region,
-        [nameof(Scotch.Age)] = scotch => scotch.Age,
-        [nameof(Scotch.Amount)] = scotch => scotch.Amount,
-    };
-    
+    private static Dictionary<string, Expression<Func<Scotch, object>>> SortByMapping { get; } =
+        new(StringComparer.CurrentCultureIgnoreCase)
+        {
+            [nameof(Scotch.Name)] = scotch => scotch.Name,
+            [nameof(Scotch.Region)] = scotch => scotch.Region,
+            [nameof(Scotch.Age)] = scotch => scotch.Age,
+            [nameof(Scotch.Amount)] = scotch => scotch.Amount
+        };
+
     public async Task<IReadOnlyList<Scotch>> GetScotches
     (
-        string name = "", 
-        int pageIndex = 0, 
+        string name = "",
+        int pageIndex = 0,
         int pageSize = 100,
-        string sortBy = nameof(Scotch.Name), 
+        string sortBy = nameof(Scotch.Name),
         string sortDirection = "asc",
         CancellationToken cancellationToken = default
     )
     {
         var query = databaseContext.Scotches.AsQueryable();
-        
+
         if (SortByMapping.TryGetValue(sortBy, out var keySelector))
         {
             query = sortDirection == "asc"
@@ -42,9 +43,9 @@ public class ScotchRepository(DatabaseContext databaseContext) : IScotchReposito
 
         if (!string.IsNullOrWhiteSpace(name))
         {
-            query = query.Where(x => x.Name.Contains(name, StringComparison.CurrentCultureIgnoreCase));
+            query = query.Where(x => x.Name.ToLower().Contains(name.ToLower()));
         }
-        
+
         var scotches = await query
             .Skip(pageIndex * pageSize)
             .Take(pageSize)

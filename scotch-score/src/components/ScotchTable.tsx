@@ -9,9 +9,8 @@ import {
   TableSortLabel,
   Paper,
   Box,
-  CircularProgress,
 } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { getScotches } from "../services/scotchService";
 import { ScotchColumn } from "../types/scotch";
@@ -25,6 +24,7 @@ function ScotchTable() {
   const scotches = useQuery({
     queryKey: ["scotches", sortBy, sortDirection],
     queryFn: () => getScotches("", 0, 100, sortBy, sortDirection),
+    placeholderData: keepPreviousData,
   });
   const onClickSortHeader = (column: ScotchColumn) => {
     if (column === sortBy) {
@@ -43,10 +43,14 @@ function ScotchTable() {
             <TableHead>
               <TableRow>
                 <TableCell
-                  sx={{ display: { xs: "none", sm: "table-cell" } }}
+                  sx={{
+                    display: { xs: "none", sm: "table-cell" },
+                  }}
                 ></TableCell>
                 <TableCell
-                  sx={{ display: { xs: "none", sm: "table-cell" } }}
+                  sx={{
+                    display: { xs: "none", sm: "table-cell" },
+                  }}
                   onClick={() => onClickSortHeader("name")}
                 >
                   <TableSortLabel
@@ -57,7 +61,9 @@ function ScotchTable() {
                   </TableSortLabel>
                 </TableCell>
                 <TableCell
-                  sx={{ display: { xs: "none", sm: "none", md: "table-cell" } }}
+                  sx={{
+                    display: { xs: "none", sm: "none", md: "table-cell" },
+                  }}
                   onClick={() => onClickSortHeader("region")}
                 >
                   <TableSortLabel
@@ -68,7 +74,9 @@ function ScotchTable() {
                   </TableSortLabel>
                 </TableCell>
                 <TableCell
-                  sx={{ display: { xs: "none", sm: "none", md: "table-cell" } }}
+                  sx={{
+                    display: { xs: "none", sm: "none", md: "table-cell" },
+                  }}
                   onClick={() => onClickSortHeader("age")}
                 >
                   <TableSortLabel
@@ -79,7 +87,9 @@ function ScotchTable() {
                   </TableSortLabel>
                 </TableCell>
                 <TableCell
-                  sx={{ display: { xs: "none", sm: "table-cell" } }}
+                  sx={{
+                    display: { xs: "none", sm: "table-cell" },
+                  }}
                   onClick={() => onClickSortHeader("amount")}
                 >
                   <TableSortLabel
@@ -90,7 +100,9 @@ function ScotchTable() {
                   </TableSortLabel>
                 </TableCell>
                 <TableCell
-                  sx={{ display: { xs: "none", sm: "table-cell" } }}
+                  sx={{
+                    display: { xs: "none", sm: "table-cell" },
+                  }}
                   onClick={() => onClickSortHeader("averageRating")}
                 >
                   <TableSortLabel
@@ -103,27 +115,6 @@ function ScotchTable() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {scotches.isLoading && (
-                <TableRow>
-                  <TableCell colSpan={6} align="center">
-                    <CircularProgress />
-                  </TableCell>
-                </TableRow>
-              )}
-              {scotches.isError && (
-                <TableRow>
-                  <TableCell colSpan={6} align="center">
-                    Error loading scotches
-                  </TableCell>
-                </TableRow>
-              )}
-              {scotches.data?.length === 0 && (
-                <TableRow>
-                  <TableCell colSpan={6} align="center">
-                    No scotches found
-                  </TableCell>
-                </TableRow>
-              )}
               {scotches.data?.map((scotch) => (
                 <TableRow
                   key={scotch.id}
