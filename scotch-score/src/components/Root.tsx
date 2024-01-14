@@ -9,8 +9,11 @@ import {
   alpha,
   InputAdornment,
   CircularProgress,
+  IconButton,
+  Stack,
 } from "@mui/material";
-import { Link as RouterLink } from "react-router-dom";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import Scotch from "../types/scotch";
 import { useQuery } from "@tanstack/react-query";
@@ -22,6 +25,9 @@ import { Search } from "@mui/icons-material";
 function Root() {
   const [name, setName] = useState<string>("");
   const [debouncedName, setDebouncedName] = useState<string>(name);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const canGoBack = location.key !== "default";
 
   useDebounce(() => setDebouncedName(name), 1000, [name]);
 
@@ -36,15 +42,22 @@ function Root() {
       <AppBar>
         <Grid container spacing={1} padding={2} alignItems="center">
           <Grid item xs={12} sm={4}>
-            <Link
-              component={RouterLink}
-              to="/"
-              variant="h6"
-              underline="none"
-              color="inherit"
-            >
-              ScotchScore
-            </Link>
+            <Stack direction="row" alignItems="center" spacing={1}>
+              {canGoBack && (
+                <IconButton onClick={() => navigate(-1)}>
+                  <ArrowBackIcon sx={{ color: "primary.contrastText" }} />
+                </IconButton>
+              )}
+              <Link
+                component={RouterLink}
+                to="/"
+                variant="h6"
+                underline="none"
+                color="inherit"
+              >
+                ScotchScore
+              </Link>
+            </Stack>
           </Grid>
           <Grid item xs={12} sm={6} lg={4}>
             <Autocomplete

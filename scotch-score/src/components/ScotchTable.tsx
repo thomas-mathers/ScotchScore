@@ -16,6 +16,7 @@ import { getScotches } from "../services/scotchService";
 import { ScotchColumn } from "../types/scotch";
 import { useState } from "react";
 import SortDirection from "../types/sortDirection";
+import formatCurrency from "../util/formatCurrency";
 
 function ScotchTable() {
   const navigate = useNavigate();
@@ -45,11 +46,7 @@ function ScotchTable() {
                 <TableCell
                   sx={{
                     display: { xs: "none", sm: "table-cell" },
-                  }}
-                ></TableCell>
-                <TableCell
-                  sx={{
-                    display: { xs: "none", sm: "table-cell" },
+                    verticalAlign: "bottom",
                   }}
                   onClick={() => onClickSortHeader("name")}
                 >
@@ -63,6 +60,7 @@ function ScotchTable() {
                 <TableCell
                   sx={{
                     display: { xs: "none", sm: "none", md: "table-cell" },
+                    verticalAlign: "bottom",
                   }}
                   onClick={() => onClickSortHeader("region")}
                 >
@@ -76,7 +74,9 @@ function ScotchTable() {
                 <TableCell
                   sx={{
                     display: { xs: "none", sm: "none", md: "table-cell" },
+                    verticalAlign: "bottom",
                   }}
+                  align="right"
                   onClick={() => onClickSortHeader("age")}
                 >
                   <TableSortLabel
@@ -89,7 +89,9 @@ function ScotchTable() {
                 <TableCell
                   sx={{
                     display: { xs: "none", sm: "table-cell" },
+                    verticalAlign: "bottom",
                   }}
+                  align="right"
                   onClick={() => onClickSortHeader("amount")}
                 >
                   <TableSortLabel
@@ -102,7 +104,9 @@ function ScotchTable() {
                 <TableCell
                   sx={{
                     display: { xs: "none", sm: "table-cell" },
+                    verticalAlign: "bottom",
                   }}
+                  align="right"
                   onClick={() => onClickSortHeader("averageRating")}
                 >
                   <TableSortLabel
@@ -118,26 +122,15 @@ function ScotchTable() {
               {scotches.data?.map((scotch) => (
                 <TableRow
                   key={scotch.id}
-                  hover
                   onClick={(e) => navigate(`/scotches/${scotch.id}`)}
                 >
-                  <TableCell>
-                    <img
-                      src={scotch.images[0]}
-                      width={100}
-                      height={100}
-                      alt={scotch.name}
-                      style={{
-                        height: "100px",
-                        width: "100px",
-                        objectFit: "contain",
-                      }}
-                    />
+                  <TableCell sx={{ verticalAlign: "top" }}>
+                    {scotch.name}
                   </TableCell>
-                  <TableCell>{scotch.name}</TableCell>
                   <TableCell
                     sx={{
                       display: { xs: "none", sm: "none", md: "table-cell" },
+                      verticalAlign: "top",
                     }}
                   >
                     {scotch.region}
@@ -145,14 +138,28 @@ function ScotchTable() {
                   <TableCell
                     sx={{
                       display: { xs: "none", sm: "none", md: "table-cell" },
+                      verticalAlign: "top",
                     }}
+                    align="right"
                   >
                     {scotch.age}
                   </TableCell>
-                  <TableCell sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                    {scotch.amount}
+                  <TableCell
+                    sx={{
+                      display: { xs: "none", sm: "table-cell" },
+                      verticalAlign: "top",
+                    }}
+                    align="right"
+                  >
+                    {formatCurrency(scotch.amount, scotch.currency)}
                   </TableCell>
-                  <TableCell sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                  <TableCell
+                    sx={{
+                      display: { xs: "none", sm: "table-cell" },
+                      verticalAlign: "top",
+                    }}
+                    align="right"
+                  >
                     <Rating value={scotch.averageRating} readOnly />
                   </TableCell>
                 </TableRow>
