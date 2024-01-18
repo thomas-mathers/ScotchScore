@@ -1,5 +1,6 @@
+import CreateReviewRequest from "../types/createReviewRequest";
 import Review from "../types/review";
-import { getJson } from "./apiService";
+import { getJson, postJson } from "./apiService";
 
 async function getReviews(
   scotchId: string,
@@ -9,4 +10,11 @@ async function getReviews(
   return getJson(`scotches/${scotchId}/reviews`, { pageIndex, pageSize });
 }
 
-export { getReviews };
+async function postReview(
+  scotchId: string,
+  createReviewRequest: CreateReviewRequest
+): Promise<Review> {
+  return postJson(`scotches/${scotchId}/reviews`, createReviewRequest);
+}
+
+export { getReviews, postReview };

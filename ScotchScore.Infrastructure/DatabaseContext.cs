@@ -5,12 +5,12 @@ namespace ScotchScore.Infrastructure;
 
 public class DatabaseContext : DbContext
 {
-    public DbSet<Scotch> Scotches => Set<Scotch>();
-    public DbSet<Review> Reviews => Set<Review>();
-    
     public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
     {
     }
+
+    public DbSet<Review> Reviews => Set<Review>();
+    public DbSet<Scotch> Scotches => Set<Scotch>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -21,7 +21,7 @@ public class DatabaseContext : DbContext
         modelBuilder.Entity<Scotch>().Property(x => x.Id).ToJsonProperty("id");
         modelBuilder.Entity<Scotch>().Property(x => x.Region).HasConversion<string>();
         modelBuilder.Entity<Scotch>().Property(x => x.Currency).HasConversion<string>();
-        
+
         modelBuilder.Entity<Review>().ToContainer("Reviews");
         modelBuilder.Entity<Review>().HasNoDiscriminator();
         modelBuilder.Entity<Review>().HasKey(x => x.Id);

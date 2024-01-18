@@ -7,7 +7,7 @@ async function getScotches(
   pageIndex: number = 0,
   pageSize: number = 100,
   sortBy: ScotchColumn = "name",
-  sortDirection: SortDirection = "asc"
+  sortDirection: SortDirection = "Ascending"
 ): Promise<Scotch[]> {
   return getJson(`scotches`, {
     name,

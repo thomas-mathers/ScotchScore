@@ -12,16 +12,45 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import { Controller, useForm } from "react-hook-form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { postReview } from "../services/reviewService";
+import CreateReviewRequest from "../types/createReviewRequest";
+import Review from "../types/review";
 
 interface NewReviewDialogProps {
+  scotchId: string;
   rating: number;
   open: boolean;
   onClose?: () => void;
 }
 
-function NewReviewDialog({ rating, open, onClose }: NewReviewDialogProps) {
+function NewReviewDialog({
+  scotchId,
+  rating,
+  open,
+  onClose,
+}: NewReviewDialogProps) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const { control, register, handleSubmit, formState } =
+    useForm<CreateReviewRequest>({
+      defaultValues: { rating },
+    });
+  const { errors } = formState;
+
+  const queryClient = useQueryClient();
+
+  const postReviewMutation = useMutation<Review, unknown, CreateReviewRequest>({
+    mutationFn: (request) => postReview(scotchId, request),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["reviews", scotchId] });
+      onClose?.();
+    },
+  });
+
+  const handleValidSubmit = (request: CreateReviewRequest) =>
+    postReviewMutation.mutate(request);
 
   return (
     <Dialog
@@ -31,25 +60,66 @@ function NewReviewDialog({ rating, open, onClose }: NewReviewDialogProps) {
       maxWidth="sm"
       fullWidth
     >
-      <DialogTitle>Write a Review</DialogTitle>
-      <DialogContent>
-        <Stack spacing={3} justifyContent="flex-start">
-          <Typography>Rating</Typography>
-          <Box>
-            <Rating value={rating} />
-          </Box>
-          <TextField label="Review" rows={5} multiline fullWidth />
-          <TextField label="Review Title" fullWidth />
-          <TextField label="Name" fullWidth />
-          <TextField label="Email" fullWidth />
-        </Stack>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button variant="contained" color="primary">
-          Submit
-        </Button>
-      </DialogActions>
+      <form onSubmit={handleSubmit(handleValidSubmit)}>
+        <DialogTitle>Write a Review</DialogTitle>
+        <DialogContent>
+          <Stack spacing={3} justifyContent="flex-start">
+            <Typography>Rating</Typography>
+            <Box>
+              <Controller
+                control={control}
+                name={"rating"}
+                defaultValue={-1}
+                render={({ field: { onChange, value } }) => (
+                  <Rating
+                    name={"rating"}
+                    onChange={onChange}
+                    value={Number(value)}
+                  />
+                )}
+              />
+            </Box>
+            <TextField
+              label="Review"
+              rows={5}
+              multiline
+              fullWidth
+              {...register("description", { required: "Review is required" })}
+              error={Boolean(errors.description)}
+              helperText={errors.description?.message}
+            />
+            <TextField
+              label="Review Title"
+              fullWidth
+              {...register("title", { required: "Review Title is required" })}
+              error={Boolean(errors.title)}
+              helperText={errors.title?.message}
+            />
+            <TextField
+              label="Name"
+              fullWidth
+              {...register("userName", { required: "Name is required" })}
+              error={Boolean(errors.userName)}
+              helperText={errors.userName?.message}
+            />
+            <TextField
+              label="Email"
+              fullWidth
+              {...register("userEmail", {
+                required: "Email is required",
+              })}
+              error={Boolean(errors.userEmail)}
+              helperText={errors.userEmail?.message}
+            />
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={onClose}>Cancel</Button>
+          <Button variant="contained" color="primary" type="submit">
+            Submit
+          </Button>
+        </DialogActions>
+      </form>
     </Dialog>
   );
 }

@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
-namespace ScotchScore.Domain
+namespace ScotchScore.Contracts
 {
     public class Scotch
     {

@@ -8,6 +8,8 @@ import { useState } from "react";
 import { getScotch } from "../services/scotchService";
 import { useQuery } from "@tanstack/react-query";
 import { getReviews } from "../services/reviewService";
+import ImageGallery, { ReactImageGalleryItem } from "react-image-gallery";
+import "react-image-gallery/styles/css/image-gallery.css";
 
 function ScotchDetailPage() {
   const { id } = useParams();
@@ -22,7 +24,15 @@ function ScotchDetailPage() {
     queryFn: () => getReviews(id!),
   });
 
-  const [open, setOpen] = useState(false);
+  const [rating, setRating] = useState<number | null>(0);
+  const [newReviewDialogOpen, setNewReviewDialogOpen] = useState(false);
+
+  const images = scotch.data?.images ?? [];
+
+  const items: ReactImageGalleryItem[] = images.map((src) => ({
+    original: src,
+    thumbnail: src,
+  }));
 
   if (scotch.isError || reviews.isError) {
     return <Navigate to="/404" replace />;
@@ -34,20 +44,14 @@ function ScotchDetailPage() {
       <Paper>
         <Box padding={5}>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm="auto">
-              <img
-                src={scotch.data?.images[0]}
-                width={250}
-                height={250}
-                alt={scotch.data?.name}
-                style={{
-                  height: "250px",
-                  width: "250px",
-                  objectFit: "contain",
-                }}
+            <Grid item xs={12} sm={6} md={4}>
+              <ImageGallery
+                items={items}
+                showPlayButton={false}
+                showBullets={true}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={6} md={8}>
               <p>{scotch.data?.description}</p>
             </Grid>
           </Grid>
@@ -79,9 +83,10 @@ function ScotchDetailPage() {
             <Grid item xs={12} md={4}>
               <p>Review this product</p>
               <Rating
-                value={0}
+                value={rating}
+                onChange={(e, newRating) => setRating(newRating)}
                 precision={0.5}
-                onClick={(e) => setOpen(true)}
+                onClick={(e) => setNewReviewDialogOpen(true)}
               />
             </Grid>
           </Grid>
@@ -91,7 +96,12 @@ function ScotchDetailPage() {
           ))}
         </Box>
       </Paper>
-      <NewReviewDialog open={open} rating={0} onClose={() => setOpen(false)} />
+      <NewReviewDialog
+        open={newReviewDialogOpen}
+        scotchId={id!}
+        rating={rating!}
+        onClose={() => setNewReviewDialogOpen(false)}
+      />
     </Box>
   );
 }

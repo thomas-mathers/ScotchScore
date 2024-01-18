@@ -11,11 +11,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.Azure.AppConfiguration.AspNetCore" Version="7.0.0" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" Version="8.0.0" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Cosmos" Version="8.0.0" />
-      <PackageReference Include="Microsoft.Extensions.Configuration.AzureAppConfiguration" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Azure.AppConfiguration.AspNetCore" Version="7.0.0"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" Version="8.0.0"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Cosmos" Version="8.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration.AzureAppConfiguration" Version="7.0.0"/>
     </ItemGroup>
 
 </Project>

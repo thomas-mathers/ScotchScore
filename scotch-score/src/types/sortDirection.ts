@@ -1,3 +1,3 @@
-type SortDirection = "asc" | "desc";
+type SortDirection = "Ascending" | "Descending";
 
 export default SortDirection;

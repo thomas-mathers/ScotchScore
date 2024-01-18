@@ -1,7 +1,8 @@
 ﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using ScotchScore.Application.Scotches.Repositories;
-using ScotchScore.Domain;
+using ScotchScore.Contracts;
+using Scotch = ScotchScore.Domain.Scotch;
 
 namespace ScotchScore.Infrastructure.Scotches.Repositories;
 
@@ -22,7 +23,7 @@ public class ScotchRepository(DatabaseContext databaseContext) : IScotchReposito
         int pageIndex = 0,
         int pageSize = 100,
         string sortBy = nameof(Scotch.Name),
-        string sortDirection = "asc",
+        SortDirection sortDirection = SortDirection.Ascending,
         CancellationToken cancellationToken = default
     )
     {
@@ -30,13 +31,13 @@ public class ScotchRepository(DatabaseContext databaseContext) : IScotchReposito
 
         if (SortByMapping.TryGetValue(sortBy, out var keySelector))
         {
-            query = sortDirection == "asc"
+            query = sortDirection == SortDirection.Ascending
                 ? query.OrderBy(keySelector)
                 : query.OrderByDescending(keySelector);
         }
         else
         {
-            query = sortDirection == "asc"
+            query = sortDirection == SortDirection.Ascending
                 ? query.OrderBy(x => x.Name)
                 : query.OrderByDescending(x => x.Name);
         }
