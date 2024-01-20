@@ -27,12 +27,12 @@ function ScotchDetailPage() {
   const [rating, setRating] = useState<number | null>(0);
   const [newReviewDialogOpen, setNewReviewDialogOpen] = useState(false);
 
-  const images = scotch.data?.images ?? [];
-
-  const items: ReactImageGalleryItem[] = images.map((src) => ({
-    original: src,
-    thumbnail: src,
-  }));
+  const items: ReactImageGalleryItem[] | undefined = scotch.data?.images.map(
+    (src) => ({
+      original: src,
+      thumbnail: src,
+    })
+  );
 
   if (scotch.isError || reviews.isError) {
     return <Navigate to="/404" replace />;
@@ -45,11 +45,13 @@ function ScotchDetailPage() {
         <Box padding={5}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6} md={4}>
-              <ImageGallery
-                items={items}
-                showPlayButton={false}
-                showBullets={true}
-              />
+              {items && items.length > 0 && (
+                <ImageGallery
+                  items={items}
+                  showPlayButton={false}
+                  showBullets={true}
+                />
+              )}
             </Grid>
             <Grid item xs={12} sm={6} md={8}>
               <p>{scotch.data?.description}</p>
@@ -84,9 +86,9 @@ function ScotchDetailPage() {
               <p>Review this product</p>
               <Rating
                 value={rating}
-                onChange={(e, newRating) => setRating(newRating)}
+                onChange={(_e, newRating) => setRating(newRating)}
                 precision={0.5}
-                onClick={(e) => setNewReviewDialogOpen(true)}
+                onClick={() => setNewReviewDialogOpen(true)}
               />
             </Grid>
           </Grid>
