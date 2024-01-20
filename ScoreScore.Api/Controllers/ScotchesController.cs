@@ -11,6 +11,8 @@ namespace ScoreScore.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[Consumes("application/json")]
+[Produces("application/json")]
 public class ScotchesController(
     IRequestHandler<GetScotchQuery, Result<Scotch?>> getScotchQueryHandler,
     IRequestHandler<GetScotchesQuery, Result<IReadOnlyList<Scotch>>> getScotchesQueryHandler,
@@ -19,33 +21,30 @@ public class ScotchesController(
     : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<IReadOnlyList<Scotch>>> GetScotches([FromQuery] GetScotchesRequest query)
+    public async Task<ActionResult<IReadOnlyList<Scotch>>> GetScotches(
+        [FromQuery] ScotchSearchParameters searchParameters, CancellationToken cancellationToken)
     {
         var getScotchesQuery = new GetScotchesQuery
         {
-            Name = query.Name,
-            PageIndex = query.PageIndex,
-            PageSize = query.PageSize,
-            SortBy = query.SortBy,
-            SortDirection = query.SortDirection
+            SearchParameters = searchParameters
         };
 
-        var result = await getScotchesQueryHandler.Handle(getScotchesQuery, CancellationToken.None);
+        var result = await getScotchesQueryHandler.Handle(getScotchesQuery, cancellationToken);
 
         return result.ToActionResult(this);
     }
 
     [HttpGet("{scotchId}")]
-    public async Task<ActionResult<Scotch?>> GetScotch([FromRoute] string scotchId)
+    public async Task<ActionResult<Scotch?>> GetScotch([FromRoute] string scotchId, CancellationToken cancellationToken)
     {
-        var result =
-            await getScotchQueryHandler.Handle(new GetScotchQuery { ScotchId = scotchId }, CancellationToken.None);
+        var result = await getScotchQueryHandler.Handle(new GetScotchQuery { ScotchId = scotchId }, cancellationToken);
 
         return result.ToActionResult(this);
     }
 
     [HttpPost("{scotchId}/reviews")]
-    public async Task<ActionResult<Review>> CreateReview(string scotchId, [FromBody] CreateReviewRequest request)
+    public async Task<ActionResult<Review>> CreateReview(string scotchId, [FromBody] CreateReviewRequest request,
+        CancellationToken cancellationToken)
     {
         var createReviewCommand = new CreateReviewCommand
         {
@@ -57,26 +56,22 @@ public class ScotchesController(
             UserEmail = request.UserEmail
         };
 
-        var result = await createReviewCommandHandler.Handle(createReviewCommand, CancellationToken.None);
+        var result = await createReviewCommandHandler.Handle(createReviewCommand, cancellationToken);
 
         return result.ToActionResult(this);
     }
 
     [HttpGet("{scotchId}/reviews")]
     public async Task<ActionResult<IReadOnlyList<Review>>> GetReviews([FromRoute] string scotchId,
-        [FromQuery] GetScotchReviewsRequest request)
+        [FromQuery] ReviewSearchParameters searchParameters, CancellationToken cancellationToken)
     {
         var getReviewsQuery = new GetReviewsQuery
         {
-            Name = request.Name,
             ScotchId = scotchId,
-            PageIndex = request.PageIndex,
-            PageSize = request.PageSize,
-            SortBy = request.SortBy,
-            SortDirection = request.SortDirection
+            SearchParameters = searchParameters
         };
 
-        var result = await getReviewsQueryHandler.Handle(getReviewsQuery, CancellationToken.None);
+        var result = await getReviewsQueryHandler.Handle(getReviewsQuery, cancellationToken);
 
         return result.ToActionResult(this);
     }

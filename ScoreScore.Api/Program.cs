@@ -19,7 +19,7 @@ builder.Services.AddApplication().AddInfrastructure(configuration);
 builder.Services.AddControllers()
     .AddJsonOptions(options => { options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); });
 
-builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true); 
+builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
 builder.Services.Configure<MvcOptions>(options =>
 {
@@ -28,10 +28,8 @@ builder.Services.Configure<MvcOptions>(options =>
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(corsPolicyName, corsPolicyBuilder =>
-    {
-        corsPolicyBuilder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-    });
+    options.AddPolicy(corsPolicyName,
+        corsPolicyBuilder => { corsPolicyBuilder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); });
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

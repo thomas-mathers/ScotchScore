@@ -9,11 +9,7 @@ namespace ScotchScore.Application.Scotches.Queries;
 
 public class GetScotchesQuery
 {
-    public string Name { get; init; } = string.Empty;
-    public int PageIndex { get; init; } = 0;
-    public int PageSize { get; init; } = 100;
-    public string SortBy { get; init; } = nameof(Domain.Scotch.Name);
-    public SortDirection SortDirection { get; init; } = SortDirection.Ascending;
+    public ScotchSearchParameters SearchParameters { get; init; } = new();
 }
 
 public class GetScotchesQueryHandler(IScotchRepository scotchRepository)
@@ -24,11 +20,7 @@ public class GetScotchesQueryHandler(IScotchRepository scotchRepository)
     {
         var scotches = await scotchRepository.GetScotches
         (
-            request.Name,
-            request.PageIndex,
-            request.PageSize,
-            request.SortBy,
-            request.SortDirection,
+            request.SearchParameters,
             cancellationToken
         );
 

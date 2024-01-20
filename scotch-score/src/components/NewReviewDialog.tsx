@@ -98,7 +98,17 @@ function NewReviewDialog({
             <TextField
               label="Name"
               fullWidth
-              {...register("userName", { required: "Name is required" })}
+              {...register("userName", {
+                required: "Name is required",
+                minLength: {
+                  value: 3,
+                  message: "Name must be at least 3 characters long",
+                },
+                maxLength: {
+                  value: 50,
+                  message: "Name must be at most 50 characters long",
+                },
+              })}
               error={Boolean(errors.userName)}
               helperText={errors.userName?.message}
             />
@@ -107,6 +117,10 @@ function NewReviewDialog({
               fullWidth
               {...register("userEmail", {
                 required: "Email is required",
+                pattern: {
+                  value: /\S+@\S+\.\S+/,
+                  message: "Email is invalid",
+                },
               })}
               error={Boolean(errors.userEmail)}
               helperText={errors.userEmail?.message}

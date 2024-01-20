@@ -7,11 +7,8 @@ public interface IReviewRepository
 {
     Task<IReadOnlyList<Review>> GetReviews
     (
-        string scotchId, 
-        int pageIndex = 0, 
-        int pageSize = 100,
-        string sortBy = nameof(Review.DateCreated), 
-        SortDirection sortDirection = SortDirection.Ascending,
+        string scotchId,
+        ReviewSearchParameters searchParameters,
         CancellationToken cancellationToken = default
     );
 

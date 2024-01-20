@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ScotchScore.Contracts
 {
-    public class GetScotchReviewsRequest
+    public class ReviewSearchParameters
     {
         public string Name { get; set; } = string.Empty;
 
@@ -11,11 +11,9 @@ namespace ScotchScore.Contracts
         [DefaultValue(0)]
         public int PageIndex { get; set; }
 
-        [Range(1, 100)] 
-        [DefaultValue(100)] 
-        public int PageSize { get; set; } = 100;
+        [Range(1, 100)] [DefaultValue(100)] public int PageSize { get; set; } = 100;
 
-        public string SortBy { get; set; } = string.Empty;
+        public ReviewSortColumn SortBy { get; set; } = ReviewSortColumn.DateCreated;
         public SortDirection SortDirection { get; set; } = SortDirection.Ascending;
     }
 }

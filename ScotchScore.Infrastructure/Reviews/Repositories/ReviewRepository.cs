@@ -9,19 +9,16 @@ public class ReviewRepository(DatabaseContext databaseContext) : IReviewReposito
 {
     public async Task<IReadOnlyList<Review>> GetReviews
     (
-        string scotchId, 
-        int pageIndex = 0, 
-        int pageSize = 100,
-        string sortBy = "DateCreated",
-        SortDirection sortDirection = SortDirection.Ascending, 
+        string scotchId,
+        ReviewSearchParameters searchParameters,
         CancellationToken cancellationToken = default
     )
     {
         var reviews = await databaseContext.Reviews
             .Where(x => x.ScotchId == scotchId)
             .OrderBy(x => x.DateCreated)
-            .Skip(pageIndex * pageSize)
-            .Take(pageSize)
+            .Skip(searchParameters.PageIndex * searchParameters.PageSize)
+            .Take(searchParameters.PageSize)
             .ToListAsync(cancellationToken);
 
         return reviews;
