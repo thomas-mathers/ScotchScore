@@ -24,20 +24,30 @@ public class ScotchesController(
     public async Task<ActionResult<IReadOnlyList<Scotch>>> GetScotches(
         [FromQuery] ScotchSearchParameters searchParameters, CancellationToken cancellationToken)
     {
-        var getScotchesQuery = new GetScotchesQuery
-        {
-            SearchParameters = searchParameters
-        };
-
-        var result = await getScotchesQueryHandler.Handle(getScotchesQuery, cancellationToken);
+        var result = await getScotchesQueryHandler.Handle
+        (
+            new GetScotchesQuery
+            {
+                SearchParameters = searchParameters
+            }, 
+            cancellationToken
+        );
 
         return result.ToActionResult(this);
     }
 
     [HttpGet("{scotchId}")]
-    public async Task<ActionResult<Scotch?>> GetScotch([FromRoute] string scotchId, CancellationToken cancellationToken)
+    public async Task<ActionResult<Scotch?>> GetScotch([FromRoute] string scotchId, 
+        CancellationToken cancellationToken)
     {
-        var result = await getScotchQueryHandler.Handle(new GetScotchQuery { ScotchId = scotchId }, cancellationToken);
+        var result = await getScotchQueryHandler.Handle
+        (
+            new GetScotchQuery
+            {
+                ScotchId = scotchId
+            }, 
+            cancellationToken
+        );
 
         return result.ToActionResult(this);
     }
@@ -46,17 +56,19 @@ public class ScotchesController(
     public async Task<ActionResult<Review>> CreateReview(string scotchId, [FromBody] CreateReviewRequest request,
         CancellationToken cancellationToken)
     {
-        var createReviewCommand = new CreateReviewCommand
-        {
-            ScotchId = scotchId,
-            Title = request.Title,
-            Description = request.Description,
-            Rating = request.Rating,
-            UserName = request.UserName,
-            UserEmail = request.UserEmail
-        };
-
-        var result = await createReviewCommandHandler.Handle(createReviewCommand, cancellationToken);
+        var result = await createReviewCommandHandler.Handle
+        (
+            new CreateReviewCommand
+            {
+                ScotchId = scotchId,
+                Title = request.Title,
+                Description = request.Description,
+                Rating = request.Rating,
+                UserName = request.UserName,
+                UserEmail = request.UserEmail
+            }, 
+            cancellationToken
+        );
 
         return result.ToActionResult(this);
     }
@@ -65,13 +77,15 @@ public class ScotchesController(
     public async Task<ActionResult<IReadOnlyList<Review>>> GetReviews([FromRoute] string scotchId,
         [FromQuery] ReviewSearchParameters searchParameters, CancellationToken cancellationToken)
     {
-        var getReviewsQuery = new GetReviewsQuery
-        {
-            ScotchId = scotchId,
-            SearchParameters = searchParameters
-        };
-
-        var result = await getReviewsQueryHandler.Handle(getReviewsQuery, cancellationToken);
+        var result = await getReviewsQueryHandler.Handle
+        (
+            new GetReviewsQuery
+            {
+                ScotchId = scotchId,
+                SearchParameters = searchParameters
+            }, 
+            cancellationToken
+        );
 
         return result.ToActionResult(this);
     }

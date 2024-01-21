@@ -7,6 +7,12 @@ namespace ScotchScore.Infrastructure.Reviews.Repositories;
 
 public class ReviewRepository(DatabaseContext databaseContext) : IReviewRepository
 {
+    public Task<Review?> GetReview(string reviewId, CancellationToken cancellationToken = default)
+    {
+        return databaseContext.Reviews
+            .SingleOrDefaultAsync(x => x.Id == reviewId, cancellationToken);
+    }
+
     public async Task<IReadOnlyList<Review>> GetReviews
     (
         string scotchId,

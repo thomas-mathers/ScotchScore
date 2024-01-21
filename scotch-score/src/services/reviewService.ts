@@ -17,4 +17,12 @@ async function postReview(
   return postJson(`scotches/${scotchId}/reviews`, createReviewRequest);
 }
 
-export { getReviews, postReview };
+async function upvoteReview(reviewId: string): Promise<Review> {
+  return postJson(`reviews/${reviewId}/upvote`, {});
+}
+
+async function downvoteReview(reviewId: string): Promise<Review> {
+  return postJson(`reviews/${reviewId}/downvote`, {});
+}
+
+export { getReviews, postReview, upvoteReview, downvoteReview };

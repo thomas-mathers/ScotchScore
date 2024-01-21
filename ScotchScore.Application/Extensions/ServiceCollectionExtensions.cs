@@ -18,6 +18,10 @@ public static class ServiceCollectionExtensions
         serviceCollection.AddScoped<IRequestHandler<GetScotchQuery, Result<Scotch?>>, GetScotchQueryHandler>();
         serviceCollection
             .AddScoped<IRequestHandler<GetScotchesQuery, Result<IReadOnlyList<Scotch>>>, GetScotchesQueryHandler>();
+        serviceCollection
+            .AddScoped<IRequestHandler<DownvoteReviewCommand, Result<Review>>, DownvoteReviewCommandHandler>();
+        serviceCollection
+            .AddScoped<IRequestHandler<UpvoteReviewCommand, Result<Review>>, UpvoteReviewCommandHandler>();
 
         return serviceCollection;
     }

@@ -44,6 +44,7 @@ function NewReviewDialog({
   const postReviewMutation = useMutation<Review, unknown, CreateReviewRequest>({
     mutationFn: (request) => postReview(scotchId, request),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["scotches", scotchId] });
       queryClient.invalidateQueries({ queryKey: ["reviews", scotchId] });
       onClose?.();
     },

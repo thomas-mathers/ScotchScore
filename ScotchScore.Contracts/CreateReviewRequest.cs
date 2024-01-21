@@ -6,7 +6,7 @@ namespace ScotchScore.Contracts
     {
         [Required] public string Description { get; set; } = string.Empty;
 
-        [Required] [Range(0, 5)] public decimal Rating { get; set; }
+        [Required] [Range(0, 5)] public int Rating { get; set; }
 
         [Required] public string Title { get; set; } = string.Empty;
 

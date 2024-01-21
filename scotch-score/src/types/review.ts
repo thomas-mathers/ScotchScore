@@ -1,5 +1,5 @@
 interface Review {
-  id?: string;
+  id: string;
   scotchId: string;
   title: string;
   description: string;

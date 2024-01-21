@@ -18,13 +18,8 @@ public static class ScotchMapper
             Amount = scotch.Amount,
             Currency = Map(scotch.Currency),
             Images = scotch.Images,
-            NumberOfOneStarReviews = scotch.NumberOfOneStarReviews,
-            NumberOfTwoStarReviews = scotch.NumberOfTwoStarReviews,
-            NumberOfThreeStarReviews = scotch.NumberOfThreeStarReviews,
-            NumberOfFourStarReviews = scotch.NumberOfFourStarReviews,
-            NumberOfFiveStarReviews = scotch.NumberOfFiveStarReviews,
-            NumberOfPositiveRecommendations = scotch.NumberOfPositiveRecommendations,
-            NumberOfNegativeRecommendations = scotch.NumberOfNegativeRecommendations,
+            RatingCounts = scotch.RatingCounts,
+            AverageRating = scotch.AverageRating,
             DateCreated = scotch.DateCreated
         };
     }

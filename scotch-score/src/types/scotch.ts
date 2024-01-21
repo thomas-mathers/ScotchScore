@@ -11,16 +11,8 @@ interface Scotch {
   amount: number;
   currency: CurrencyCode;
   images: string[];
-  numberOfOneStarRatings: number;
-  numberOfTwoStarRatings: number;
-  numberOfThreeStarRatings: number;
-  numberOfFourStarRatings: number;
-  numberOfFiveStarRatings: number;
-  numberOfRatings: number;
+  ratingCounts: number[];
   averageRating: number;
-  numberOfPositiveRecommendations: number;
-  numberOfNegativeRecommendations: number;
-  numberOfRecommendations: number;
   dateCreated: Date;
 }
 
