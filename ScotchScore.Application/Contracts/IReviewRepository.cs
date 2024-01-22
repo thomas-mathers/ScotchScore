@@ -1,7 +1,7 @@
 ﻿using ScotchScore.Contracts;
 using Review = ScotchScore.Domain.Review;
 
-namespace ScotchScore.Application.Reviews.Repositories;
+namespace ScotchScore.Application.Contracts;
 
 public interface IReviewRepository
 {

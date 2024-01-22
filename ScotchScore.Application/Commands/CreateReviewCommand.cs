@@ -1,12 +1,11 @@
 using Ardalis.Result;
-using ScotchScore.Application.Common.Interfaces;
-using ScotchScore.Application.Reviews.Mappers;
-using ScotchScore.Application.Reviews.Repositories;
-using ScotchScore.Application.Scotches.Repositories;
+using ScotchScore.Application.Common;
+using ScotchScore.Application.Contracts;
+using ScotchScore.Application.Mappers;
 using ScotchScore.Domain;
 using Review = ScotchScore.Contracts.Review;
 
-namespace ScotchScore.Application.Reviews.Commands;
+namespace ScotchScore.Application.Commands;
 
 public class CreateReviewCommand
 {
@@ -76,6 +75,6 @@ public class CreateReviewCommandHandler(
             sumOfRatings += (i + 1) * scotch.RatingCounts[i];
         }
 
-        return numOfRatings == 0 ? 0 : (decimal)sumOfRatings / numOfRatings;
+        return numOfRatings == 0 ? 0 : (decimal) sumOfRatings / numOfRatings;
     }
 }

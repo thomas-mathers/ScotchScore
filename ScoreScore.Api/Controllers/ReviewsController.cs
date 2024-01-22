@@ -1,8 +1,8 @@
 using Ardalis.Result;
 using Ardalis.Result.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
-using ScotchScore.Application.Common.Interfaces;
-using ScotchScore.Application.Reviews.Commands;
+using ScotchScore.Application.Commands;
+using ScotchScore.Application.Common;
 using ScotchScore.Contracts;
 
 namespace ScoreScore.Api.Controllers;

@@ -1,10 +1,10 @@
 ﻿using Ardalis.Result;
-using ScotchScore.Application.Common.Interfaces;
-using ScotchScore.Application.Reviews.Mappers;
-using ScotchScore.Application.Reviews.Repositories;
+using ScotchScore.Application.Common;
+using ScotchScore.Application.Contracts;
+using ScotchScore.Application.Mappers;
 using ScotchScore.Contracts;
 
-namespace ScotchScore.Application.Reviews.Queries;
+namespace ScotchScore.Application.Queries;
 
 public class GetReviewsQuery
 {

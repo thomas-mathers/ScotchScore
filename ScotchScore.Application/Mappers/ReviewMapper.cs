@@ -1,6 +1,6 @@
 using Review = ScotchScore.Contracts.Review;
 
-namespace ScotchScore.Application.Reviews.Mappers;
+namespace ScotchScore.Application.Mappers;
 
 public static class ReviewMapper
 {

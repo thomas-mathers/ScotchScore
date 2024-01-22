@@ -1,9 +1,8 @@
 using Ardalis.Result;
 using Microsoft.Extensions.DependencyInjection;
-using ScotchScore.Application.Common.Interfaces;
-using ScotchScore.Application.Reviews.Commands;
-using ScotchScore.Application.Reviews.Queries;
-using ScotchScore.Application.Scotches.Queries;
+using ScotchScore.Application.Commands;
+using ScotchScore.Application.Common;
+using ScotchScore.Application.Queries;
 using ScotchScore.Contracts;
 
 namespace ScotchScore.Application.Extensions;

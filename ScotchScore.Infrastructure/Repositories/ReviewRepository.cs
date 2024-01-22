@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ScotchScore.Application.Reviews.Repositories;
+using ScotchScore.Application.Contracts;
 using ScotchScore.Contracts;
 using Review = ScotchScore.Domain.Review;
 
-namespace ScotchScore.Infrastructure.Reviews.Repositories;
+namespace ScotchScore.Infrastructure.Repositories;
 
 public class ReviewRepository(DatabaseContext databaseContext) : IReviewRepository
 {
@@ -25,7 +25,7 @@ public class ReviewRepository(DatabaseContext databaseContext) : IReviewReposito
             .OrderBy(x => x.DateCreated)
             .Skip(searchParameters.PageIndex * searchParameters.PageSize)
             .Take(searchParameters.PageSize)
-            .ToListAsync(cancellationToken);
+            .ToArrayAsync(cancellationToken);
 
         return reviews;
     }

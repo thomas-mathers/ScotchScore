@@ -1,11 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ScotchScore.Application.Common.Interfaces;
-using ScotchScore.Application.Reviews.Repositories;
-using ScotchScore.Application.Scotches.Repositories;
-using ScotchScore.Infrastructure.Reviews.Repositories;
-using ScotchScore.Infrastructure.Scotches.Repositories;
+using ScotchScore.Application.Contracts;
+using ScotchScore.Infrastructure.Repositories;
 
 namespace ScotchScore.Infrastructure.Extensions;
 
@@ -22,6 +19,7 @@ public static class ServiceCollectionExtensions
         serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
         serviceCollection.AddScoped<IScotchRepository, ScotchRepository>();
         serviceCollection.AddScoped<IReviewRepository, ReviewRepository>();
+        serviceCollection.AddScoped<IReviewVoteRepository, ReviewVoteRepository>();
 
         return serviceCollection;
     }

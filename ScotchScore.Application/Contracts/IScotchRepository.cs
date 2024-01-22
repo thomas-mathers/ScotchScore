@@ -1,7 +1,7 @@
 ﻿using ScotchScore.Contracts;
 using Scotch = ScotchScore.Domain.Scotch;
 
-namespace ScotchScore.Application.Scotches.Repositories;
+namespace ScotchScore.Application.Contracts;
 
 public interface IScotchRepository
 {

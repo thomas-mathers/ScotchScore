@@ -1,7 +1,7 @@
 using ScotchScore.Contracts;
 using Scotch = ScotchScore.Contracts.Scotch;
 
-namespace ScotchScore.Application.Scotches.Mappers;
+namespace ScotchScore.Application.Mappers;
 
 public static class ScotchMapper
 {

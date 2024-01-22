@@ -1,4 +1,4 @@
-using ScotchScore.Application.Common.Interfaces;
+using ScotchScore.Application.Contracts;
 
 namespace ScotchScore.Infrastructure;
 

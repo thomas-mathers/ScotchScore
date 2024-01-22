@@ -1,10 +1,10 @@
 ﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using ScotchScore.Application.Scotches.Repositories;
+using ScotchScore.Application.Contracts;
 using ScotchScore.Contracts;
 using Scotch = ScotchScore.Domain.Scotch;
 
-namespace ScotchScore.Infrastructure.Scotches.Repositories;
+namespace ScotchScore.Infrastructure.Repositories;
 
 public class ScotchRepository(DatabaseContext databaseContext) : IScotchRepository
 {
@@ -46,7 +46,7 @@ public class ScotchRepository(DatabaseContext databaseContext) : IScotchReposito
         var scotches = await query
             .Skip(searchParameters.PageIndex * searchParameters.PageSize)
             .Take(searchParameters.PageSize)
-            .ToListAsync(cancellationToken);
+            .ToArrayAsync(cancellationToken);
 
         return scotches;
     }

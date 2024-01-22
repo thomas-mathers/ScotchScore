@@ -3,14 +3,11 @@ using ScotchScore.Domain;
 
 namespace ScotchScore.Infrastructure;
 
-public class DatabaseContext : DbContext
+public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbContext(options)
 {
-    public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
-    {
-    }
-
     public DbSet<Review> Reviews => Set<Review>();
     public DbSet<Scotch> Scotches => Set<Scotch>();
+    public DbSet<ReviewVote> ReviewVotes => Set<ReviewVote>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -27,5 +24,13 @@ public class DatabaseContext : DbContext
         modelBuilder.Entity<Review>().HasKey(x => x.Id);
         modelBuilder.Entity<Review>().HasPartitionKey(x => x.ScotchId);
         modelBuilder.Entity<Review>().Property(x => x.Id).ToJsonProperty("id");
+        
+        modelBuilder.Entity<ReviewVote>().ToContainer("ReviewVotes");
+        modelBuilder.Entity<ReviewVote>().HasNoDiscriminator();
+        modelBuilder.Entity<ReviewVote>().HasKey(x => x.Id);
+        modelBuilder.Entity<ReviewVote>().HasPartitionKey(x => x.ScotchId);
+        modelBuilder.Entity<ReviewVote>().Property(x => x.Id).ToJsonProperty("id");
+        
+        base.OnModelCreating(modelBuilder);
     }
 }

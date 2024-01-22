@@ -1,4 +1,4 @@
-namespace ScotchScore.Application.Common.Interfaces;
+namespace ScotchScore.Application.Common;
 
 public interface IRequestHandler<in TRequest, TResponse>
 {

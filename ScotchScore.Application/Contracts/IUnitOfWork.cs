@@ -1,4 +1,4 @@
-namespace ScotchScore.Application.Common.Interfaces;
+namespace ScotchScore.Application.Contracts;
 
 public interface IUnitOfWork
 {
