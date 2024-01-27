@@ -1,5 +1,5 @@
-import CurrencyCode from "./currencyCode";
-import ScotchRegion from "./scotchRegion";
+import CurrencyCode from './currencyCode';
+import ScotchRegion from './scotchRegion';
 
 interface Scotch {
   id: string;

@@ -1,33 +1,34 @@
-import { StrictMode } from "react";
-import ReactDOM from "react-dom/client";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { CssBaseline, ThemeProvider } from "@mui/material";
+import { StrictMode } from 'react';
+import ReactDOM from 'react-dom/client';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { CssBaseline, ThemeProvider } from '@mui/material';
 
-import "@fontsource/roboto/300.css";
-import "@fontsource/roboto/400.css";
-import "@fontsource/roboto/500.css";
-import "@fontsource/roboto/700.css";
-import "./index.css";
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
+import './index.css';
 
-import ErrorPage from "./components/ErrorPage";
-import theme from "./theme";
-import ScotchDetailPage from "./components/ScotchDetailPage";
-import Root from "./components/Root";
-import ScotchTable from "./components/ScotchTable";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import ErrorPage from './components/ErrorPage';
+import theme from './theme';
+import ScotchDetailPage from './components/ScotchDetailPage';
+import Root from './components/Root';
+import ScotchTable from './components/ScotchTable';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Auth0Provider } from '@auth0/auth0-react';
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <Root />,
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "/",
+        path: '/',
         element: <ScotchTable />,
       },
       {
-        path: "/scotches/:id",
+        path: '/scotches/:id',
         element: <ScotchDetailPage />,
       },
     ],
@@ -37,7 +38,7 @@ const router = createBrowserRouter([
 const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
+  document.getElementById('root') as HTMLElement,
 );
 
 root.render(
@@ -46,9 +47,17 @@ root.render(
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <QueryClientProvider client={queryClient}>
-          <RouterProvider router={router} />
+          <Auth0Provider
+            domain={process.env.REACT_APP_AUTH0_DOMAIN!}
+            clientId={process.env.REACT_APP_AUTH0_CLIENT_ID!}
+            authorizationParams={{
+              audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+            }}
+          >
+            <RouterProvider router={router} />
+          </Auth0Provider>
         </QueryClientProvider>
       </ThemeProvider>
     </>
-  </StrictMode>
+  </StrictMode>,
 );

@@ -1,4 +1,4 @@
-import { Box, Grid, Rating, Typography } from "@mui/material";
+import { Box, Grid, Rating, Typography } from '@mui/material';
 
 interface RatingSummaryProps {
   rating: number;

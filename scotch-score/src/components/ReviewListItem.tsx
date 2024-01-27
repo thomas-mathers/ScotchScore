@@ -1,8 +1,9 @@
-import { Avatar, Box, Divider, Grid, IconButton, Rating } from "@mui/material";
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import ThumbDownIcon from "@mui/icons-material/ThumbDown";
-import Review from "../types/review";
-import TimeAgo from "react-timeago";
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import { Avatar, Box, Divider, Grid, IconButton, Rating } from '@mui/material';
+import TimeAgo from 'react-timeago';
+
+import Review from '../types/review';
 
 interface ReviewListItemProps {
   review: Review;

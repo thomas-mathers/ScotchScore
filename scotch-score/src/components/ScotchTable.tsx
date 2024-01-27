@@ -1,75 +1,75 @@
-import { Paper, Box, Rating, useMediaQuery, useTheme } from "@mui/material";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { getScotches } from "../services/scotchService";
-import Scotch, { ScotchColumn } from "../types/scotch";
-import { useEffect, useState } from "react";
-import SortDirection from "../types/sortDirection";
+import { Paper, Box, Rating, useMediaQuery, useTheme } from '@mui/material';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { getScotches } from '../services/scotchService';
+import Scotch, { ScotchColumn } from '../types/scotch';
+import { useEffect, useState } from 'react';
+import SortDirection from '../types/sortDirection';
 import {
   DataGrid,
   GridColDef,
   GridPaginationModel,
   GridSortModel,
-} from "@mui/x-data-grid";
-import formatCurrency from "../util/formatCurrency";
-import { useNavigate } from "react-router-dom";
+} from '@mui/x-data-grid';
+import formatCurrency from '../util/formatCurrency';
+import { useNavigate } from 'react-router-dom';
 
 const columns: GridColDef<Scotch>[] = [
   {
-    field: "name",
-    headerName: "Name",
-    headerAlign: "left",
-    align: "left",
+    field: 'name',
+    headerName: 'Name',
+    headerAlign: 'left',
+    align: 'left',
     flex: 1,
     minWidth: 200,
     disableColumnMenu: true,
   },
   {
-    field: "distillery",
-    headerName: "Distillery",
-    headerAlign: "left",
-    align: "left",
+    field: 'distillery',
+    headerName: 'Distillery',
+    headerAlign: 'left',
+    align: 'left',
     width: 200,
     disableColumnMenu: true,
   },
   {
-    field: "region",
-    headerName: "Region",
-    headerAlign: "left",
-    align: "left",
+    field: 'region',
+    headerName: 'Region',
+    headerAlign: 'left',
+    align: 'left',
     width: 150,
     disableColumnMenu: true,
   },
   {
-    field: "age",
-    headerName: "Age",
-    headerAlign: "right",
-    align: "right",
+    field: 'age',
+    headerName: 'Age',
+    headerAlign: 'right',
+    align: 'right',
     width: 100,
     disableColumnMenu: true,
   },
   {
-    field: "amount",
-    headerName: "Amount",
-    headerAlign: "right",
-    align: "right",
+    field: 'amount',
+    headerName: 'Amount',
+    headerAlign: 'right',
+    align: 'right',
     width: 150,
     disableColumnMenu: true,
-    valueFormatter: (params) => formatCurrency(params.value as number, "CAD"),
+    valueFormatter: (params) => formatCurrency(params.value as number, 'CAD'),
   },
   {
-    field: "averageRating",
-    headerName: "Rating",
-    headerAlign: "right",
-    align: "right",
+    field: 'averageRating',
+    headerName: 'Rating',
+    headerAlign: 'right',
+    align: 'right',
     width: 150,
     disableColumnMenu: true,
     renderCell: (params) => <Rating value={params.value as number} readOnly />,
   },
   {
-    field: "dateCreated",
-    headerName: "Date Created",
-    headerAlign: "right",
-    align: "right",
+    field: 'dateCreated',
+    headerName: 'Date Created',
+    headerAlign: 'right',
+    align: 'right',
     width: 160,
     disableColumnMenu: true,
     valueFormatter: (params) =>
@@ -120,20 +120,20 @@ const ALL_COLUMNS = {
 function ScotchTable() {
   const navigate = useNavigate();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.only("xs"));
-  const isTablet = useMediaQuery(theme.breakpoints.only("sm"));
-  const isLaptop = useMediaQuery(theme.breakpoints.between("md", "lg"));
+  const isMobile = useMediaQuery(theme.breakpoints.only('xs'));
+  const isTablet = useMediaQuery(theme.breakpoints.only('sm'));
+  const isLaptop = useMediaQuery(theme.breakpoints.between('md', 'lg'));
 
-  const [sortBy, setSortBy] = useState<ScotchColumn>("name");
+  const [sortBy, setSortBy] = useState<ScotchColumn>('name');
   const [sortDirection, setSortDirection] =
-    useState<SortDirection>("Ascending");
+    useState<SortDirection>('Ascending');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(100);
   const [columnsVisible, setColumnVisible] = useState(ALL_COLUMNS);
 
   const scotches = useQuery({
-    queryKey: ["scotches", sortBy, sortDirection, page, pageSize],
-    queryFn: () => getScotches("", page, pageSize, sortBy, sortDirection),
+    queryKey: ['scotches', sortBy, sortDirection, page, pageSize],
+    queryFn: () => getScotches('', page, pageSize, sortBy, sortDirection),
     placeholderData: keepPreviousData,
   });
 
@@ -144,7 +144,7 @@ function ScotchTable() {
       return;
     }
     setSortBy(model[0].field as ScotchColumn);
-    setSortDirection(model[0].sort === "asc" ? "Ascending" : "Descending");
+    setSortDirection(model[0].sort === 'asc' ? 'Ascending' : 'Descending');
   };
 
   const onPaginationModelChange = (model: GridPaginationModel) => {
@@ -176,7 +176,7 @@ function ScotchTable() {
           rows={rows}
           rowCount={rows.length}
           getRowClassName={(params) =>
-            params.indexRelativeToCurrentPage % 2 === 0 ? "even" : "odd"
+            params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
           }
           onRowClick={(params) => navigate(`/scotches/${params.id}`)}
           sortingMode="server"

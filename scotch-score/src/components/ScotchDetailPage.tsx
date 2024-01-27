@@ -1,47 +1,52 @@
-import { Box, Grid, Paper, Rating } from "@mui/material";
-import { Navigate, useParams } from "react-router-dom";
-import RatingHistogram from "./RatingHistogram";
-import RatingSummary from "./RatingSummary";
-import ReviewListItem from "./ReviewListItem";
-import NewReviewDialog from "./NewReviewDialog";
-import { useState } from "react";
-import { getScotch } from "../services/scotchService";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Box, Grid, Paper, Rating } from '@mui/material';
+import { Navigate, useParams } from 'react-router-dom';
+import RatingHistogram from './RatingHistogram';
+import RatingSummary from './RatingSummary';
+import ReviewListItem from './ReviewListItem';
+import NewReviewDialog from './NewReviewDialog';
+import { useState } from 'react';
+import { getScotch } from '../services/scotchService';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   downvoteReview,
   getReviews,
   upvoteReview,
-} from "../services/reviewService";
-import ImageGallery, { ReactImageGalleryItem } from "react-image-gallery";
-import "react-image-gallery/styles/css/image-gallery.css";
-import Review from "../types/review";
+} from '../services/reviewService';
+import ImageGallery, { ReactImageGalleryItem } from 'react-image-gallery';
+import 'react-image-gallery/styles/css/image-gallery.css';
+import Review from '../types/review';
+import useUser from '../hooks/useUser';
 
 function ScotchDetailPage() {
   const { id } = useParams();
 
+  const { accessToken } = useUser();
+
   const scotch = useQuery({
-    queryKey: ["scotches", id],
+    queryKey: ['scotches', id],
     queryFn: () => getScotch(id!),
   });
 
   const reviews = useQuery({
-    queryKey: ["reviews", id],
+    queryKey: ['reviews', id],
     queryFn: () => getReviews(id!),
   });
 
   const queryClient = useQueryClient();
 
   const upvoteMutation = useMutation<Review, unknown, string>({
-    mutationFn: upvoteReview,
+    mutationFn: (id) => upvoteReview(id, accessToken),
+    mutationKey: ['upvoteReview', id, accessToken],
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["reviews", id] });
+      queryClient.invalidateQueries({ queryKey: ['reviews', id] });
     },
   });
 
   const downvoteMutation = useMutation<Review, unknown, string>({
-    mutationFn: downvoteReview,
+    mutationFn: (id) => downvoteReview(id, accessToken),
+    mutationKey: ['downvoteReview', id, accessToken],
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["reviews", id] });
+      queryClient.invalidateQueries({ queryKey: ['reviews', id] });
     },
   });
 
@@ -55,7 +60,7 @@ function ScotchDetailPage() {
     (src) => ({
       original: src,
       thumbnail: src,
-    })
+    }),
   );
 
   if (scotch.isError || reviews.isError) {

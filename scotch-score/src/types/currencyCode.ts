@@ -1,3 +1,3 @@
-type CurrencyCode = "CAD";
+type CurrencyCode = 'CAD';
 
 export default CurrencyCode;

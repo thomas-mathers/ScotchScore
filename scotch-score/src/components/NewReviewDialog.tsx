@@ -11,12 +11,13 @@ import {
   Typography,
   useMediaQuery,
   useTheme,
-} from "@mui/material";
-import { Controller, useForm } from "react-hook-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { postReview } from "../services/reviewService";
-import CreateReviewRequest from "../types/createReviewRequest";
-import Review from "../types/review";
+} from '@mui/material';
+import { Controller, useForm } from 'react-hook-form';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { postReview } from '../services/reviewService';
+import CreateReviewRequest from '../types/createReviewRequest';
+import Review from '../types/review';
+import useUser from '../hooks/useUser';
 
 interface NewReviewDialogProps {
   scotchId: string;
@@ -32,20 +33,25 @@ function NewReviewDialog({
   onClose,
 }: NewReviewDialogProps) {
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+
   const { control, register, handleSubmit, formState } =
     useForm<CreateReviewRequest>({
       defaultValues: { rating },
     });
+
   const { errors } = formState;
 
   const queryClient = useQueryClient();
 
+  const { accessToken } = useUser();
+
   const postReviewMutation = useMutation<Review, unknown, CreateReviewRequest>({
-    mutationFn: (request) => postReview(scotchId, request),
+    mutationFn: (request) => postReview(scotchId, request, accessToken),
+    mutationKey: ['postReview', scotchId, accessToken],
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["scotches", scotchId] });
-      queryClient.invalidateQueries({ queryKey: ["reviews", scotchId] });
+      queryClient.invalidateQueries({ queryKey: ['scotches', scotchId] });
+      queryClient.invalidateQueries({ queryKey: ['reviews', scotchId] });
       onClose?.();
     },
   });
@@ -69,11 +75,11 @@ function NewReviewDialog({
             <Box>
               <Controller
                 control={control}
-                name={"rating"}
+                name={'rating'}
                 defaultValue={-1}
                 render={({ field: { onChange, value } }) => (
                   <Rating
-                    name={"rating"}
+                    name={'rating'}
                     onChange={onChange}
                     value={Number(value)}
                   />
@@ -85,29 +91,29 @@ function NewReviewDialog({
               rows={5}
               multiline
               fullWidth
-              {...register("description", { required: "Review is required" })}
+              {...register('description', { required: 'Review is required' })}
               error={Boolean(errors.description)}
               helperText={errors.description?.message}
             />
             <TextField
               label="Review Title"
               fullWidth
-              {...register("title", { required: "Review Title is required" })}
+              {...register('title', { required: 'Review Title is required' })}
               error={Boolean(errors.title)}
               helperText={errors.title?.message}
             />
             <TextField
               label="Name"
               fullWidth
-              {...register("userName", {
-                required: "Name is required",
+              {...register('userName', {
+                required: 'Name is required',
                 minLength: {
                   value: 3,
-                  message: "Name must be at least 3 characters long",
+                  message: 'Name must be at least 3 characters long',
                 },
                 maxLength: {
                   value: 50,
-                  message: "Name must be at most 50 characters long",
+                  message: 'Name must be at most 50 characters long',
                 },
               })}
               error={Boolean(errors.userName)}
@@ -116,11 +122,11 @@ function NewReviewDialog({
             <TextField
               label="Email"
               fullWidth
-              {...register("userEmail", {
-                required: "Email is required",
+              {...register('userEmail', {
+                required: 'Email is required',
                 pattern: {
                   value: /\S+@\S+\.\S+/,
-                  message: "Email is invalid",
+                  message: 'Email is invalid',
                 },
               })}
               error={Boolean(errors.userEmail)}
