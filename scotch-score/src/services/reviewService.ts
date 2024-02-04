@@ -32,6 +32,7 @@ async function upvoteReview(
   return postJson(
     `reviews/${reviewId}/upvote`,
     {},
+    {},
     { Authorization: `Bearer ${accessToken}` },
   );
 }
@@ -42,6 +43,7 @@ async function downvoteReview(
 ): Promise<Review> {
   return postJson(
     `reviews/${reviewId}/downvote`,
+    {},
     {},
     { Authorization: `Bearer ${accessToken}` },
   );

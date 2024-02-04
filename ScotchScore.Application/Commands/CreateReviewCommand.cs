@@ -13,8 +13,7 @@ public class CreateReviewCommand
     public int Rating { get; init; }
     public string ScotchId { get; init; } = string.Empty;
     public string Title { get; init; } = string.Empty;
-    public string UserEmail { get; init; } = string.Empty;
-    public string UserName { get; init; } = string.Empty;
+    public string UserId { get; init; } = string.Empty;
 }
 
 public class CreateReviewCommandHandler(
@@ -34,12 +33,11 @@ public class CreateReviewCommandHandler(
 
         var review = new Domain.Review
         {
+            UserId = request.UserId,
             ScotchId = request.ScotchId,
             Title = request.Title,
-            Description = request.Description,
             Rating = request.Rating,
-            UserName = request.UserName,
-            UserEmail = request.UserEmail
+            Description = request.Description
         };
 
         reviewRepository.Add(review);
@@ -52,7 +50,7 @@ public class CreateReviewCommandHandler(
 
         return reviewDto;
     }
-    
+
     private static void Rate(Scotch scotch, int rating)
     {
         if (rating is < 1 or > 5)
@@ -75,6 +73,6 @@ public class CreateReviewCommandHandler(
             sumOfRatings += (i + 1) * scotch.RatingCounts[i];
         }
 
-        return numOfRatings == 0 ? 0 : (decimal) sumOfRatings / numOfRatings;
+        return numOfRatings == 0 ? 0 : (decimal)sumOfRatings / numOfRatings;
     }
 }

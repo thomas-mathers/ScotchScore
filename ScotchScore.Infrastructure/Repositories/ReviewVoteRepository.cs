@@ -11,7 +11,8 @@ public class ReviewVoteRepository(DatabaseContext databaseContext) : IReviewVote
         databaseContext.ReviewVotes.Add(reviewVote);
     }
 
-    public async Task<IReadOnlyList<ReviewVote>> GetVotes(string userId, string scotchId, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<ReviewVote>> GetVotes(string userId, string scotchId,
+        CancellationToken cancellationToken = default)
     {
         return await databaseContext.ReviewVotes
             .Where(reviewVote => reviewVote.UserId == userId && reviewVote.ScotchId == scotchId)

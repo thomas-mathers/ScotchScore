@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using ScoreScore.Api.Extensions;
@@ -18,6 +19,18 @@ builder.Services.AddApplication().AddInfrastructure(configuration);
 
 builder.Services.AddControllers()
     .AddJsonOptions(options => { options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); });
+
+builder.Services
+    .AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.Authority = "https://thomasmathers.us.auth0.com/";
+        options.Audience = "http://localhost:3000/";
+    });
 
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 

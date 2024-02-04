@@ -37,7 +37,7 @@ public class DownvoteReviewCommandHandler(
             UserId = request.UserId,
             ReviewVoteType = ReviewVoteType.Downvote
         };
-        
+
         reviewVoteRepository.Add(vote);
 
         await unitOfWork.Commit(cancellationToken);

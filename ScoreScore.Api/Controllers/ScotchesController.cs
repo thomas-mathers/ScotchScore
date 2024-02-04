@@ -1,6 +1,8 @@
 using Ardalis.Result;
 using Ardalis.Result.AspNetCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ScoreScore.Api.ActionFilters;
 using ScotchScore.Application.Commands;
 using ScotchScore.Application.Common;
 using ScotchScore.Application.Queries;
@@ -28,7 +30,7 @@ public class ScotchesController(
             new GetScotchesQuery
             {
                 SearchParameters = searchParameters
-            }, 
+            },
             cancellationToken
         );
 
@@ -36,7 +38,7 @@ public class ScotchesController(
     }
 
     [HttpGet("{scotchId}")]
-    public async Task<ActionResult<Scotch?>> GetScotch([FromRoute] string scotchId, 
+    public async Task<ActionResult<Scotch?>> GetScotch([FromRoute] string scotchId,
         CancellationToken cancellationToken)
     {
         var result = await getScotchQueryHandler.Handle
@@ -44,28 +46,33 @@ public class ScotchesController(
             new GetScotchQuery
             {
                 ScotchId = scotchId
-            }, 
+            },
             cancellationToken
         );
 
         return result.ToActionResult(this);
     }
 
+    [Authorize]
+    [ClaimsFilter]
     [HttpPost("{scotchId}/reviews")]
-    public async Task<ActionResult<Review>> CreateReview(string scotchId, [FromBody] CreateReviewRequest request,
+    public async Task<ActionResult<Review>> CreateReview(string? userId, string? scotchId,
+        [FromBody] CreateReviewRequest request,
         CancellationToken cancellationToken)
     {
+        ArgumentNullException.ThrowIfNull(userId);
+        ArgumentNullException.ThrowIfNull(scotchId);
+
         var result = await createReviewCommandHandler.Handle
         (
             new CreateReviewCommand
             {
+                UserId = userId,
                 ScotchId = scotchId,
                 Title = request.Title,
                 Description = request.Description,
-                Rating = request.Rating,
-                UserName = request.UserName,
-                UserEmail = request.UserEmail
-            }, 
+                Rating = request.Rating
+            },
             cancellationToken
         );
 
@@ -82,7 +89,7 @@ public class ScotchesController(
             {
                 ScotchId = scotchId,
                 SearchParameters = searchParameters
-            }, 
+            },
             cancellationToken
         );
 

@@ -6,7 +6,7 @@ namespace ScotchScore.Application.Contracts;
 public interface IReviewRepository
 {
     Task<Review?> GetReview(string reviewId, CancellationToken cancellationToken = default);
-    
+
     Task<IReadOnlyList<Review>> GetReviews
     (
         string scotchId,

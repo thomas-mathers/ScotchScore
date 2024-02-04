@@ -1,6 +1,8 @@
 using Ardalis.Result;
 using Ardalis.Result.AspNetCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ScoreScore.Api.ActionFilters;
 using ScotchScore.Application.Commands;
 using ScotchScore.Application.Common;
 using ScotchScore.Contracts;
@@ -16,13 +18,18 @@ public class ReviewsController(
     IRequestHandler<DownvoteReviewCommand, Result<Review>> downvoteReviewCommandHandler)
     : ControllerBase
 {
+    [Authorize]
+    [ClaimsFilter]
     [HttpPost("{reviewId}/upvote")]
-    public async Task<ActionResult<Review>> Upvote(string reviewId, CancellationToken cancellationToken)
+    public async Task<ActionResult<Review>> Upvote(string? userId, string reviewId, CancellationToken cancellationToken)
     {
+        ArgumentNullException.ThrowIfNull(userId);
+
         var result = await upvoteReviewCommandHandler.Handle
         (
             new UpvoteReviewCommand
             {
+                UserId = userId,
                 ReviewId = reviewId
             },
             cancellationToken
@@ -30,14 +37,20 @@ public class ReviewsController(
 
         return result.ToActionResult(this);
     }
-    
+
+    [Authorize]
+    [ClaimsFilter]
     [HttpPost("{reviewId}/downvote")]
-    public async Task<ActionResult<Review>> Downvote(string reviewId, CancellationToken cancellationToken)
+    public async Task<ActionResult<Review>> Downvote(string? userId, string reviewId,
+        CancellationToken cancellationToken)
     {
+        ArgumentNullException.ThrowIfNull(userId);
+
         var result = await downvoteReviewCommandHandler.Handle
         (
             new DownvoteReviewCommand
             {
+                UserId = userId,
                 ReviewId = reviewId
             },
             cancellationToken
