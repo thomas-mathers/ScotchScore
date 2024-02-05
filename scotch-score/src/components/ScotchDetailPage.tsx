@@ -102,9 +102,9 @@ function ScotchDetailPage() {
             <Grid item xs={12} md={4}>
               <p>Review this product</p>
               <Rating
+                disabled={!accessToken}
                 value={rating}
                 onChange={(_e, newRating) => setRating(newRating)}
-                precision={0.5}
                 onClick={() => setNewReviewDialogOpen(true)}
               />
             </Grid>

@@ -43,16 +43,6 @@ function NewReviewDialog({
 
   const { errors } = formState;
 
-  useEffect(() => {
-    setValue('rating', rating);
-  }, [rating, setValue]);
-
-  useEffect(() => {
-    setValue('userEmail', user?.email ?? '');
-    setValue('userName', user?.name ?? '');
-    setValue('userProfilePictureUrl', user?.picture ?? '');
-  }, [user, setValue]);
-
   const queryClient = useQueryClient();
 
   const postReviewMutation = useMutation<Review, unknown, CreateReviewRequest>({
@@ -67,6 +57,16 @@ function NewReviewDialog({
 
   const handleValidSubmit = (request: CreateReviewRequest) =>
     postReviewMutation.mutate(request);
+
+  useEffect(() => {
+    setValue('rating', rating);
+  }, [rating, setValue]);
+
+  useEffect(() => {
+    setValue('userEmail', user?.email ?? '');
+    setValue('userName', user?.name ?? '');
+    setValue('userProfilePictureUrl', user?.picture ?? '');
+  }, [user, setValue]);
 
   return (
     <Dialog
@@ -85,7 +85,7 @@ function NewReviewDialog({
               <Controller
                 control={control}
                 name={'rating'}
-                defaultValue={-1}
+                defaultValue={rating}
                 render={({ field: { onChange, value } }) => (
                   <Rating
                     name={'rating'}
