@@ -13,7 +13,10 @@ public class CreateReviewCommand
     public int Rating { get; init; }
     public string ScotchId { get; init; } = string.Empty;
     public string Title { get; init; } = string.Empty;
+    public string UserEmail { get; init; } = string.Empty;
     public string UserId { get; init; } = string.Empty;
+    public string UserName { get; init; } = string.Empty;
+    public string UserProfilePictureUrl { get; init; } = string.Empty;
 }
 
 public class CreateReviewCommandHandler(
@@ -33,11 +36,14 @@ public class CreateReviewCommandHandler(
 
         var review = new Domain.Review
         {
-            UserId = request.UserId,
+            Description = request.Description,
+            Rating = request.Rating,
             ScotchId = request.ScotchId,
             Title = request.Title,
-            Rating = request.Rating,
-            Description = request.Description
+            UserEmail = request.UserEmail,
+            UserId = request.UserId,
+            UserName = request.UserName,
+            UserProfilePictureUrl = request.UserProfilePictureUrl
         };
 
         reviewRepository.Add(review);

@@ -22,5 +22,8 @@ namespace ScotchScore.Contracts
         [MinLength(3)]
         [MaxLength(50)]
         public string UserName { get; set; } = string.Empty;
+
+        [Required]
+        public string UserProfilePictureUrl { get; set; }
     }
 }

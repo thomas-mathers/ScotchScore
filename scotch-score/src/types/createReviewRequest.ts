@@ -2,8 +2,9 @@ interface CreateReviewRequest {
   title: string;
   description: string;
   rating: number;
-  userName: string;
   userEmail: string;
+  userName: string;
+  userProfilePictureUrl: string;
 }
 
 export default CreateReviewRequest;

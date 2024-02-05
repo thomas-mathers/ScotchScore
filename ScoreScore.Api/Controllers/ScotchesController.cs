@@ -67,11 +67,14 @@ public class ScotchesController(
         (
             new CreateReviewCommand
             {
-                UserId = userId,
+                Description = request.Description,
+                Rating = request.Rating,
                 ScotchId = scotchId,
                 Title = request.Title,
-                Description = request.Description,
-                Rating = request.Rating
+                UserEmail = request.UserEmail,
+                UserId = userId,
+                UserName = request.UserName,
+                UserProfilePictureUrl = request.UserProfilePictureUrl
             },
             cancellationToken
         );

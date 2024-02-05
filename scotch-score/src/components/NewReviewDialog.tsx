@@ -18,6 +18,7 @@ import { postReview } from '../services/reviewService';
 import CreateReviewRequest from '../types/createReviewRequest';
 import Review from '../types/review';
 import useUser from '../hooks/useUser';
+import { useEffect } from 'react';
 
 interface NewReviewDialogProps {
   scotchId: string;
@@ -35,16 +36,24 @@ function NewReviewDialog({
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
-  const { control, register, handleSubmit, formState } =
-    useForm<CreateReviewRequest>({
-      defaultValues: { rating },
-    });
+  const { user, accessToken } = useUser();
+
+  const { control, register, handleSubmit, formState, setValue } =
+    useForm<CreateReviewRequest>();
 
   const { errors } = formState;
 
-  const queryClient = useQueryClient();
+  useEffect(() => {
+    setValue('rating', rating);
+  }, [rating, setValue]);
 
-  const { accessToken } = useUser();
+  useEffect(() => {
+    setValue('userEmail', user?.email ?? '');
+    setValue('userName', user?.name ?? '');
+    setValue('userProfilePictureUrl', user?.picture ?? '');
+  }, [user, setValue]);
+
+  const queryClient = useQueryClient();
 
   const postReviewMutation = useMutation<Review, unknown, CreateReviewRequest>({
     mutationFn: (request) => postReview(scotchId, request, accessToken),
@@ -101,36 +110,6 @@ function NewReviewDialog({
               {...register('title', { required: 'Review Title is required' })}
               error={Boolean(errors.title)}
               helperText={errors.title?.message}
-            />
-            <TextField
-              label="Name"
-              fullWidth
-              {...register('userName', {
-                required: 'Name is required',
-                minLength: {
-                  value: 3,
-                  message: 'Name must be at least 3 characters long',
-                },
-                maxLength: {
-                  value: 50,
-                  message: 'Name must be at most 50 characters long',
-                },
-              })}
-              error={Boolean(errors.userName)}
-              helperText={errors.userName?.message}
-            />
-            <TextField
-              label="Email"
-              fullWidth
-              {...register('userEmail', {
-                required: 'Email is required',
-                pattern: {
-                  value: /\S+@\S+\.\S+/,
-                  message: 'Email is invalid',
-                },
-              })}
-              error={Boolean(errors.userEmail)}
-              helperText={errors.userEmail?.message}
             />
           </Stack>
         </DialogContent>
