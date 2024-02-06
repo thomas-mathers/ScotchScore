@@ -22,6 +22,6 @@ public class ReviewVoteRepository(DatabaseContext databaseContext) : IReviewVote
     public Task<ReviewVote?> GetVote(string reviewId, string userId, CancellationToken cancellationToken)
     {
         return databaseContext.ReviewVotes
-            .SingleOrDefaultAsync(x => x.ReviewId == reviewId && x.UserId == userId, cancellationToken);
+            .FirstOrDefaultAsync(x => x.ReviewId == reviewId && x.UserId == userId, cancellationToken);
     }
 }
