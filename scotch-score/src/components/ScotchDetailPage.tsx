@@ -37,7 +37,7 @@ function ScotchDetailPage() {
   const upvoteMutation = useMutation<Review, unknown, string>({
     mutationFn: (id) => upvoteReview(id, accessToken),
     mutationKey: ['upvoteReview', id, accessToken],
-    onSettled: () => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['reviews', id] });
     },
   });
@@ -45,7 +45,7 @@ function ScotchDetailPage() {
   const downvoteMutation = useMutation<Review, unknown, string>({
     mutationFn: (id) => downvoteReview(id, accessToken),
     mutationKey: ['downvoteReview', id, accessToken],
-    onSettled: () => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['reviews', id] });
     },
   });
