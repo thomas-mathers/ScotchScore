@@ -13,6 +13,12 @@ public class ReviewRepository(DatabaseContext databaseContext) : IReviewReposito
             .SingleOrDefaultAsync(x => x.Id == reviewId, cancellationToken);
     }
 
+    public Task<Review?> GetReview(string scotchId, string userId, CancellationToken cancellationToken = default)
+    {
+        return databaseContext.Reviews
+            .SingleOrDefaultAsync(x => x.ScotchId == scotchId && x.UserId == userId, cancellationToken);
+    }
+
     public async Task<IReadOnlyList<Review>> GetReviews
     (
         string scotchId,

@@ -14,14 +14,14 @@ namespace ScoreScore.Api.Controllers;
 [Consumes("application/json")]
 [Produces("application/json")]
 public class ReviewsController(
-    IRequestHandler<UpvoteReviewCommand, Result<Review>> upvoteReviewCommandHandler,
-    IRequestHandler<DownvoteReviewCommand, Result<Review>> downvoteReviewCommandHandler)
+    IRequestHandler<UpvoteReviewCommand, Result<ReviewVote>> upvoteReviewCommandHandler,
+    IRequestHandler<DownvoteReviewCommand, Result<ReviewVote>> downvoteReviewCommandHandler)
     : ControllerBase
 {
     [Authorize]
     [ClaimsFilter]
     [HttpPost("{reviewId}/upvote")]
-    public async Task<ActionResult<Review>> Upvote(string? userId, string reviewId, CancellationToken cancellationToken)
+    public async Task<ActionResult<ReviewVote>> Upvote(string? userId, string reviewId, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(userId);
 
@@ -41,7 +41,7 @@ public class ReviewsController(
     [Authorize]
     [ClaimsFilter]
     [HttpPost("{reviewId}/downvote")]
-    public async Task<ActionResult<Review>> Downvote(string? userId, string reviewId,
+    public async Task<ActionResult<ReviewVote>> Downvote(string? userId, string reviewId,
         CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(userId);

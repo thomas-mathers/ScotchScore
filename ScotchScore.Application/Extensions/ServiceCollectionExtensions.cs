@@ -4,6 +4,8 @@ using ScotchScore.Application.Commands;
 using ScotchScore.Application.Common;
 using ScotchScore.Application.Queries;
 using ScotchScore.Contracts;
+using Review = ScotchScore.Contracts.Review;
+using Scotch = ScotchScore.Contracts.Scotch;
 
 namespace ScotchScore.Application.Extensions;
 
@@ -18,9 +20,9 @@ public static class ServiceCollectionExtensions
         serviceCollection
             .AddScoped<IRequestHandler<GetScotchesQuery, Result<IReadOnlyList<Scotch>>>, GetScotchesQueryHandler>();
         serviceCollection
-            .AddScoped<IRequestHandler<DownvoteReviewCommand, Result<Review>>, DownvoteReviewCommandHandler>();
+            .AddScoped<IRequestHandler<DownvoteReviewCommand, Result<ReviewVote>>, DownvoteReviewCommandHandler>();
         serviceCollection
-            .AddScoped<IRequestHandler<UpvoteReviewCommand, Result<Review>>, UpvoteReviewCommandHandler>();
+            .AddScoped<IRequestHandler<UpvoteReviewCommand, Result<ReviewVote>>, UpvoteReviewCommandHandler>();
 
         return serviceCollection;
     }

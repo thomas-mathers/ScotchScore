@@ -5,7 +5,7 @@ namespace ScotchScore.Contracts
 {
     public class ReviewSearchParameters
     {
-        public string Name { get; set; } = string.Empty;
+        public string Title { get; set; }
 
         [Range(0, int.MaxValue)]
         [DefaultValue(0)]

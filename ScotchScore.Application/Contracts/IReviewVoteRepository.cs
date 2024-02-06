@@ -12,4 +12,6 @@ public interface IReviewVoteRepository
         string scotchId,
         CancellationToken cancellationToken = default
     );
+
+    Task<ReviewVote?> GetVote(string reviewId, string userId, CancellationToken cancellationToken);
 }

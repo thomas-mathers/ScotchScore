@@ -18,4 +18,10 @@ public class ReviewVoteRepository(DatabaseContext databaseContext) : IReviewVote
             .Where(reviewVote => reviewVote.UserId == userId && reviewVote.ScotchId == scotchId)
             .ToArrayAsync(cancellationToken);
     }
+
+    public Task<ReviewVote?> GetVote(string reviewId, string userId, CancellationToken cancellationToken)
+    {
+        return databaseContext.ReviewVotes
+            .SingleOrDefaultAsync(x => x.ReviewId == reviewId && x.UserId == userId, cancellationToken);
+    }
 }

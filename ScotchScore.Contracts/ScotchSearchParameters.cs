@@ -5,7 +5,7 @@ namespace ScotchScore.Contracts
 {
     public class ScotchSearchParameters
     {
-        public string Name { get; set; } = string.Empty;
+        public string Name { get; set; }
 
         [Range(0, int.MaxValue)]
         [DefaultValue(0)]

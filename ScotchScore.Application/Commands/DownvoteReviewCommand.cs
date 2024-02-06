@@ -2,8 +2,7 @@ using Ardalis.Result;
 using ScotchScore.Application.Common;
 using ScotchScore.Application.Contracts;
 using ScotchScore.Application.Mappers;
-using ScotchScore.Domain;
-using Review = ScotchScore.Contracts.Review;
+using ScotchScore.Contracts;
 
 namespace ScotchScore.Application.Commands;
 
@@ -17,33 +16,40 @@ public class DownvoteReviewCommandHandler(
     IReviewRepository reviewRepository,
     IReviewVoteRepository reviewVoteRepository,
     IUnitOfWork unitOfWork)
-    : IRequestHandler<DownvoteReviewCommand, Result<Review>>
+    : IRequestHandler<DownvoteReviewCommand, Result<ReviewVote>>
 {
-    public async Task<Result<Review>> Handle(DownvoteReviewCommand request, CancellationToken cancellationToken)
+    public async Task<Result<ReviewVote>> Handle(DownvoteReviewCommand request, CancellationToken cancellationToken)
     {
         var review = await reviewRepository.GetReview(request.ReviewId, cancellationToken);
 
         if (review is null)
         {
-            return Result<Review>.NotFound();
+            return Result<ReviewVote>.NotFound();
+        }
+        
+        var existingVote = await reviewVoteRepository.GetVote(request.ReviewId, request.UserId, cancellationToken);
+        
+        if (existingVote is not null)
+        {
+            return Result<ReviewVote>.Conflict();
         }
 
         review.Downvotes++;
 
-        var vote = new ReviewVote
+        var vote = new Domain.ReviewVote
         {
             ScotchId = review.ScotchId,
             ReviewId = review.Id,
             UserId = request.UserId,
-            ReviewVoteType = ReviewVoteType.Downvote
+            ReviewVoteType = Domain.ReviewVoteType.Downvote
         };
 
         reviewVoteRepository.Add(vote);
 
         await unitOfWork.Commit(cancellationToken);
+        
+        var voteDto = ReviewVoteMapper.Map(vote);
 
-        var reviewDto = ReviewMapper.Map(review);
-
-        return reviewDto;
+        return voteDto;
     }
 }
