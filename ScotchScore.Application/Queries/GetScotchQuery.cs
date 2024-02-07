@@ -12,12 +12,17 @@ public class GetScotchQuery
 }
 
 public class GetScotchQueryHandler(IScotchRepository scotchRepository)
-    : IRequestHandler<GetScotchQuery, Result<Scotch?>>
+    : IRequestHandler<GetScotchQuery, Result<Scotch>>
 {
-    public async Task<Result<Scotch?>> Handle(GetScotchQuery request, CancellationToken cancellationToken)
+    public async Task<Result<Scotch>> Handle(GetScotchQuery request, CancellationToken cancellationToken)
     {
         var scotch = await scotchRepository.GetScotch(request.ScotchId, cancellationToken);
-
-        return scotch is null ? null : ScotchMapper.Map(scotch);
+        
+        if (scotch is null)
+        {
+            return Result<Scotch>.NotFound();
+        }
+        
+        return ScotchMapper.Map(scotch);
     }
 }

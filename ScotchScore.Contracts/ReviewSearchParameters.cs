@@ -5,8 +5,6 @@ namespace ScotchScore.Contracts
 {
     public class ReviewSearchParameters
     {
-        public string Title { get; set; }
-
         [Range(0, int.MaxValue)]
         [DefaultValue(0)]
         public int PageIndex { get; set; }
@@ -17,5 +15,7 @@ namespace ScotchScore.Contracts
 
         public ReviewSortColumn SortBy { get; set; } = ReviewSortColumn.DateCreated;
         public SortDirection SortDirection { get; set; } = SortDirection.Ascending;
+        public string Title { get; set; }
+        public string UserId { get; set; }
     }
 }

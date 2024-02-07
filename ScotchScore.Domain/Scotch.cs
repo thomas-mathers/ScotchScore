@@ -17,7 +17,7 @@ namespace ScotchScore.Domain
         public string Name { get; set; } = string.Empty;
         public int[] RatingCounts { get; set; } = new int[5];
         public Region Region { get; set; }
-        
+
         public void Rate(int rating)
         {
             if (rating < 1 || rating > 5)

@@ -16,7 +16,7 @@ public static class ReviewVoteMapper
             DateCreated = reviewVote.DateCreated
         };
     }
-    
+
     private static ReviewVoteType Map(Domain.ReviewVoteType reviewVoteType)
     {
         return reviewVoteType switch

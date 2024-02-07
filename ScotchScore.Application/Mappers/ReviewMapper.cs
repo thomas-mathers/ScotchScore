@@ -13,6 +13,7 @@ public static class ReviewMapper
             Title = review.Title,
             Description = review.Description,
             Rating = review.Rating,
+            UserId = review.UserId,
             UserName = review.UserName,
             UserProfilePictureUrl = review.UserProfilePictureUrl,
             UserEmail = review.UserEmail,

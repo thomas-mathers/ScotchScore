@@ -40,7 +40,7 @@ public class ScotchRepository(DatabaseContext databaseContext) : IScotchReposito
 
         if (!string.IsNullOrWhiteSpace(searchParameters.Name))
         {
-            query = query.Where(x => x.Name.ToLower().Contains(searchParameters.Name.ToLower()));
+            query = query.Where(x => x.Name.Contains(searchParameters.Name, StringComparison.OrdinalIgnoreCase));
         }
 
         var scotches = await query

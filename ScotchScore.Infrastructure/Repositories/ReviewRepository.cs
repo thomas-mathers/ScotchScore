@@ -16,7 +16,7 @@ public class ReviewRepository(DatabaseContext databaseContext) : IReviewReposito
             [ReviewSortColumn.Upvotes] = review => review.Upvotes,
             [ReviewSortColumn.Downvotes] = review => review.Downvotes
         };
-    
+
     public Task<Review?> GetReview(string reviewId, CancellationToken cancellationToken = default)
     {
         return databaseContext.Reviews
@@ -39,7 +39,7 @@ public class ReviewRepository(DatabaseContext databaseContext) : IReviewReposito
         var query = databaseContext.Reviews
             .Where(x => x.ScotchId == scotchId)
             .AsQueryable();
-        
+
         if (SortByMapping.TryGetValue(searchParameters.SortBy, out var keySelector))
         {
             query = searchParameters.SortDirection == SortDirection.Ascending
@@ -52,12 +52,17 @@ public class ReviewRepository(DatabaseContext databaseContext) : IReviewReposito
                 ? query.OrderBy(x => x.DateCreated)
                 : query.OrderByDescending(x => x.DateCreated);
         }
-        
+
         if (!string.IsNullOrWhiteSpace(searchParameters.Title))
         {
-            query = query.Where(x => x.Title.ToLower().Contains(searchParameters.Title.ToLower()));
+            query = query.Where(x => x.Title.Contains(searchParameters.Title, StringComparison.OrdinalIgnoreCase));
         }
         
+        if (!string.IsNullOrWhiteSpace(searchParameters.UserId))
+        {
+            query = query.Where(x => x.UserId == searchParameters.UserId);
+        }
+
         var reviews = await query
             .Skip(searchParameters.PageIndex * searchParameters.PageSize)
             .Take(searchParameters.PageSize)

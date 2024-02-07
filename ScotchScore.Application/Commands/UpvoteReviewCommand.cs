@@ -3,6 +3,7 @@ using ScotchScore.Application.Common;
 using ScotchScore.Application.Contracts;
 using ScotchScore.Application.Mappers;
 using ScotchScore.Contracts;
+using ReviewVoteType = ScotchScore.Domain.ReviewVoteType;
 
 namespace ScotchScore.Application.Commands;
 
@@ -26,9 +27,9 @@ public class UpvoteReviewCommandHandler(
         {
             return Result<ReviewVote>.NotFound();
         }
-        
+
         var existingVote = await reviewVoteRepository.GetVote(request.ReviewId, request.UserId, cancellationToken);
-        
+
         if (existingVote is not null)
         {
             return Result<ReviewVote>.Conflict();
@@ -41,13 +42,13 @@ public class UpvoteReviewCommandHandler(
             ScotchId = review.ScotchId,
             ReviewId = review.Id,
             UserId = request.UserId,
-            ReviewVoteType = Domain.ReviewVoteType.Upvote
+            ReviewVoteType = ReviewVoteType.Upvote
         };
 
         reviewVoteRepository.Add(vote);
 
         await unitOfWork.Commit(cancellationToken);
-        
+
         var voteDto = ReviewVoteMapper.Map(vote);
 
         return voteDto;

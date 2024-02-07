@@ -32,9 +32,9 @@ public class CreateReviewCommandHandler(
         {
             return Result<Review>.NotFound();
         }
-        
+
         var existingReview = await reviewRepository.GetReview(request.ScotchId, request.UserId, cancellationToken);
-        
+
         if (existingReview is not null)
         {
             return Result<Review>.Conflict();

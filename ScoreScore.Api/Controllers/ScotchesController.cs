@@ -15,13 +15,14 @@ namespace ScoreScore.Api.Controllers;
 [Consumes("application/json")]
 [Produces("application/json")]
 public class ScotchesController(
-    IRequestHandler<GetScotchQuery, Result<Scotch?>> getScotchQueryHandler,
+    IRequestHandler<GetScotchQuery, Result<Scotch>> getScotchQueryHandler,
     IRequestHandler<GetScotchesQuery, Result<IReadOnlyList<Scotch>>> getScotchesQueryHandler,
     IRequestHandler<CreateReviewCommand, Result<Review>> createReviewCommandHandler,
     IRequestHandler<GetReviewsQuery, Result<IReadOnlyList<Review>>> getReviewsQueryHandler)
     : ControllerBase
 {
     [HttpGet]
+    [ProducesResponseType(200)]
     public async Task<ActionResult<IReadOnlyList<Scotch>>> GetScotches(
         [FromQuery] ScotchSearchParameters searchParameters, CancellationToken cancellationToken)
     {
@@ -38,7 +39,9 @@ public class ScotchesController(
     }
 
     [HttpGet("{scotchId}")]
-    public async Task<ActionResult<Scotch?>> GetScotch([FromRoute] string scotchId,
+    [ProducesResponseType(200)]
+    [ProducesResponseType(404)]
+    public async Task<ActionResult<Scotch>> GetScotch([FromRoute] string scotchId,
         CancellationToken cancellationToken)
     {
         var result = await getScotchQueryHandler.Handle
@@ -56,6 +59,10 @@ public class ScotchesController(
     [Authorize]
     [ClaimsFilter]
     [HttpPost("{scotchId}/reviews")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(409)]
     public async Task<ActionResult<Review>> CreateReview(string? userId, string? scotchId,
         [FromBody] CreateReviewRequest request,
         CancellationToken cancellationToken)
@@ -83,6 +90,7 @@ public class ScotchesController(
     }
 
     [HttpGet("{scotchId}/reviews")]
+    [ProducesResponseType(200)]
     public async Task<ActionResult<IReadOnlyList<Review>>> GetReviews([FromRoute] string scotchId,
         [FromQuery] ReviewSearchParameters searchParameters, CancellationToken cancellationToken)
     {

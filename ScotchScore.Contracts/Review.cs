@@ -13,6 +13,7 @@ namespace ScotchScore.Contracts
         public string Title { get; set; }
         public int Upvotes { get; set; }
         public string UserEmail { get; set; }
+        public string UserId { get; set; }
         public string UserName { get; set; }
         public string UserProfilePictureUrl { get; set; }
     }

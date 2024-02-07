@@ -21,7 +21,11 @@ public class ReviewsController(
     [Authorize]
     [ClaimsFilter]
     [HttpPost("{reviewId}/upvote")]
-    public async Task<ActionResult<ReviewVote>> Upvote(string? userId, string reviewId, CancellationToken cancellationToken)
+    [ProducesResponseType(200)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(409)]
+    public async Task<ActionResult<ReviewVote>> Upvote(string? userId, string reviewId,
+        CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(userId);
 
@@ -41,6 +45,9 @@ public class ReviewsController(
     [Authorize]
     [ClaimsFilter]
     [HttpPost("{reviewId}/downvote")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(409)]
     public async Task<ActionResult<ReviewVote>> Downvote(string? userId, string reviewId,
         CancellationToken cancellationToken)
     {
