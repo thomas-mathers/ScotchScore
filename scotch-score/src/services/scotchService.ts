@@ -1,21 +1,11 @@
-import Scotch, { ScotchColumn } from '../types/scotch';
-import SortDirection from '../types/sortDirection';
+import Scotch from '../types/scotch';
+import ScotchSearchParameters from '../types/scotchSearchParameters';
 import { getJson } from './apiService';
 
 async function getScotches(
-  name: string = '',
-  pageIndex: number = 0,
-  pageSize: number = 100,
-  sortBy: ScotchColumn = 'name',
-  sortDirection: SortDirection = 'Ascending',
+  searchParameters: ScotchSearchParameters,
 ): Promise<Scotch[]> {
-  return getJson(`scotches`, {
-    name,
-    pageIndex,
-    pageSize,
-    sortBy,
-    sortDirection,
-  });
+  return getJson(`scotches`, searchParameters);
 }
 
 async function getScotch(id: string): Promise<Scotch | undefined> {

@@ -5,8 +5,10 @@ async function getJson<T>(
 ): Promise<T> {
   var url = new URL(`${process.env.REACT_APP_API_BASE_URL}/${endpoint}`);
 
-  for (const key in queryParameters) {
-    url.searchParams.append(key, queryParameters[key]);
+  for (const [key, value] of Object.entries(queryParameters)) {
+    if (value) {
+      url.searchParams.append(key, value);
+    }
   }
 
   const response = await fetch(url.href, {
@@ -34,8 +36,10 @@ async function postJson<T>(
 ): Promise<T> {
   var url = new URL(`${process.env.REACT_APP_API_BASE_URL}/${endpoint}`);
 
-  for (const key in queryParameters) {
-    url.searchParams.append(key, queryParameters[key]);
+  for (const [key, value] of Object.entries(queryParameters)) {
+    if (value) {
+      url.searchParams.append(key, value);
+    }
   }
 
   const response = await fetch(url.href, {

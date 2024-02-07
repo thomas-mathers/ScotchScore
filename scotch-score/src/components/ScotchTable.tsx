@@ -3,7 +3,6 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { getScotches } from '../services/scotchService';
 import Scotch, { ScotchColumn } from '../types/scotch';
 import { useEffect, useState } from 'react';
-import SortDirection from '../types/sortDirection';
 import {
   DataGrid,
   GridColDef,
@@ -11,7 +10,9 @@ import {
   GridSortModel,
 } from '@mui/x-data-grid';
 import formatCurrency from '../util/formatCurrency';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import ScotchSearchParameters from '../types/scotchSearchParameters';
+import SortDirection from '../types/sortDirection';
 
 const columns: GridColDef<Scotch>[] = [
   {
@@ -63,7 +64,9 @@ const columns: GridColDef<Scotch>[] = [
     align: 'right',
     width: 150,
     disableColumnMenu: true,
-    renderCell: (params) => <Rating value={params.value as number} readOnly />,
+    renderCell: (params) => (
+      <Rating value={params.value as number} precision={0.5} readOnly />
+    ),
   },
   {
     field: 'dateCreated',
@@ -117,23 +120,69 @@ const ALL_COLUMNS = {
   dateCreated: true,
 };
 
+function convertToStringToStringRecord(
+  object: Record<string, any>,
+): Record<string, string> {
+  const record: Record<string, string> = {};
+  for (const [key, value] of Object.entries(object)) {
+    if (value) {
+      record[key] = String(value);
+    }
+  }
+  return record;
+}
+
+function createScotchSearchParametersFromSearchParams(
+  searchParams: URLSearchParams,
+): ScotchSearchParameters {
+  const name = searchParams.get('name');
+  const pageIndex = searchParams.get('pageIndex');
+  const pageSize = searchParams.get('pageSize');
+  const sortBy = searchParams.get('sortBy');
+  const sortDirection = searchParams.get('sortDirection');
+
+  const scotchSearchParameters: ScotchSearchParameters = {};
+
+  if (name) {
+    scotchSearchParameters.name = name;
+  }
+
+  if (pageIndex) {
+    scotchSearchParameters.pageIndex = Number(pageIndex);
+  }
+
+  if (pageSize) {
+    scotchSearchParameters.pageSize = Number(pageSize);
+  }
+
+  if (sortBy) {
+    scotchSearchParameters.sortBy = sortBy as ScotchColumn;
+  }
+
+  if (sortDirection) {
+    scotchSearchParameters.sortDirection = sortDirection as SortDirection;
+  }
+
+  return scotchSearchParameters;
+}
+
 function ScotchTable() {
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.only('xs'));
   const isTablet = useMediaQuery(theme.breakpoints.only('sm'));
   const isLaptop = useMediaQuery(theme.breakpoints.between('md', 'lg'));
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const [sortBy, setSortBy] = useState<ScotchColumn>('name');
-  const [sortDirection, setSortDirection] =
-    useState<SortDirection>('Ascending');
-  const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(100);
+  const [scotchSearchParameters, setScotchSearchParameters] =
+    useState<ScotchSearchParameters>(
+      createScotchSearchParametersFromSearchParams(searchParams),
+    );
   const [columnsVisible, setColumnVisible] = useState(ALL_COLUMNS);
 
   const scotches = useQuery({
-    queryKey: ['scotches', sortBy, sortDirection, page, pageSize],
-    queryFn: () => getScotches('', page, pageSize, sortBy, sortDirection),
+    queryKey: ['scotches', scotchSearchParameters],
+    queryFn: () => getScotches(scotchSearchParameters),
     placeholderData: keepPreviousData,
   });
 
@@ -143,13 +192,19 @@ function ScotchTable() {
     if (model.length === 0) {
       return;
     }
-    setSortBy(model[0].field as ScotchColumn);
-    setSortDirection(model[0].sort === 'asc' ? 'Ascending' : 'Descending');
+    setScotchSearchParameters({
+      ...scotchSearchParameters,
+      sortBy: model[0].field as ScotchColumn,
+      sortDirection: model[0].sort === 'asc' ? 'Ascending' : 'Descending',
+    });
   };
 
   const onPaginationModelChange = (model: GridPaginationModel) => {
-    setPage(model.page);
-    setPageSize(model.pageSize);
+    setScotchSearchParameters({
+      ...scotchSearchParameters,
+      pageIndex: model.page,
+      pageSize: model.pageSize,
+    });
   };
 
   useEffect(() => {
@@ -163,6 +218,14 @@ function ScotchTable() {
       setColumnVisible(ALL_COLUMNS);
     }
   }, [isMobile, isTablet, isLaptop]);
+
+  useEffect(() => {
+    setSearchParams(
+      new URLSearchParams(
+        convertToStringToStringRecord(scotchSearchParameters),
+      ),
+    );
+  }, [scotchSearchParameters, setSearchParams]);
 
   return (
     <Box>
@@ -184,6 +247,25 @@ function ScotchTable() {
           paginationMode="server"
           onPaginationModelChange={onPaginationModelChange}
           disableRowSelectionOnClick
+          initialState={{
+            pagination: {
+              paginationModel: {
+                page: scotchSearchParameters.pageIndex ?? 0,
+                pageSize: scotchSearchParameters.pageSize ?? 25,
+              },
+            },
+            sorting: {
+              sortModel: [
+                {
+                  field: scotchSearchParameters.sortBy ?? 'name',
+                  sort:
+                    scotchSearchParameters.sortDirection === 'Ascending'
+                      ? 'asc'
+                      : 'desc',
+                },
+              ],
+            },
+          }}
         />
       </Paper>
     </Box>

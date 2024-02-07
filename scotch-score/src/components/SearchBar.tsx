@@ -22,7 +22,7 @@ function SearchBar() {
 
   const scotches = useQuery({
     queryKey: ['scotches', debouncedName],
-    queryFn: () => getScotches(debouncedName),
+    queryFn: () => getScotches({ name: debouncedName, pageSize: 10 }),
     placeholderData: [],
   });
 
