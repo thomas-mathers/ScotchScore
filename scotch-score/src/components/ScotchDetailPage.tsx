@@ -28,8 +28,8 @@ function ScotchDetailPage() {
   });
 
   const reviews = useQuery({
-    queryKey: ['reviews', id],
-    queryFn: () => getReviews(id!),
+    queryKey: ['reviews', id, accessToken],
+    queryFn: () => getReviews(id!, 0, 100, accessToken),
   });
 
   const queryClient = useQueryClient();

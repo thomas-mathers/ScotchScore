@@ -6,12 +6,8 @@ public interface IReviewVoteRepository
 {
     void Add(ReviewVote reviewVote);
 
-    Task<IReadOnlyList<ReviewVote>> GetVotes
-    (
-        string userId,
-        string scotchId,
-        CancellationToken cancellationToken = default
-    );
+    Task<IReadOnlyList<ReviewVote>> GetUserVotes(string scotchId, string userId,
+        CancellationToken cancellationToken = default);
 
     Task<ReviewVote?> GetVote(string reviewId, string userId, CancellationToken cancellationToken);
 }

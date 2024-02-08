@@ -11,7 +11,8 @@ public class ReviewVoteRepository(DatabaseContext databaseContext) : IReviewVote
         databaseContext.ReviewVotes.Add(reviewVote);
     }
 
-    public async Task<IReadOnlyList<ReviewVote>> GetVotes(string userId, string scotchId,
+    public async Task<IReadOnlyList<ReviewVote>> GetUserVotes(string scotchId,
+        string userId,
         CancellationToken cancellationToken = default)
     {
         return await databaseContext.ReviewVotes

@@ -89,15 +89,17 @@ public class ScotchesController(
         return result.ToActionResult(this);
     }
 
+    [ClaimsFilter]
     [HttpGet("{scotchId}/reviews")]
     [ProducesResponseType(200)]
-    public async Task<ActionResult<IReadOnlyList<Review>>> GetReviews([FromRoute] string scotchId,
+    public async Task<ActionResult<IReadOnlyList<Review>>> GetReviews(string? userId, [FromRoute] string scotchId,
         [FromQuery] ReviewSearchParameters searchParameters, CancellationToken cancellationToken)
     {
         var result = await getReviewsQueryHandler.Handle
         (
             new GetReviewsQuery
             {
+                UserId = userId,
                 ScotchId = scotchId,
                 SearchParameters = searchParameters
             },

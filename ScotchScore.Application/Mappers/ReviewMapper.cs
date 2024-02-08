@@ -4,7 +4,7 @@ namespace ScotchScore.Application.Mappers;
 
 public static class ReviewMapper
 {
-    public static Review Map(Domain.Review review)
+    public static Review Map(Domain.Review review, Domain.ReviewVote? vote = null)
     {
         return new Review
         {
@@ -19,7 +19,8 @@ public static class ReviewMapper
             UserEmail = review.UserEmail,
             Upvotes = review.Upvotes,
             Downvotes = review.Downvotes,
-            DateCreated = review.DateCreated
+            DateCreated = review.DateCreated,
+            UserVote = vote is not null ? ReviewVoteMapper.Map(vote) : null
         };
     }
 }

@@ -6,8 +6,13 @@ async function getReviews(
   scotchId: string,
   pageIndex: number = 0,
   pageSize: number = 100,
+  accessToken?: string,
 ): Promise<Review[]> {
-  return getJson(`scotches/${scotchId}/reviews`, { pageIndex, pageSize });
+  return getJson(
+    `scotches/${scotchId}/reviews`,
+    { pageIndex, pageSize },
+    { Authorization: `Bearer ${accessToken}` },
+  );
 }
 
 async function postReview(
