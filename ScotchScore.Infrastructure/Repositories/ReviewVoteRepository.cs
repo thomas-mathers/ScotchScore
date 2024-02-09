@@ -11,13 +11,13 @@ public class ReviewVoteRepository(DatabaseContext databaseContext) : IReviewVote
         databaseContext.ReviewVotes.Add(reviewVote);
     }
 
-    public async Task<IReadOnlyList<ReviewVote>> GetUserVotes(string scotchId,
+    public async Task<IReadOnlyDictionary<string, ReviewVote>> GetUserVotes(string scotchId,
         string userId,
         CancellationToken cancellationToken = default)
     {
         return await databaseContext.ReviewVotes
             .Where(reviewVote => reviewVote.UserId == userId && reviewVote.ScotchId == scotchId)
-            .ToArrayAsync(cancellationToken);
+            .ToDictionaryAsync(k => k.ReviewId, v => v, cancellationToken);
     }
 
     public Task<ReviewVote?> GetVote(string reviewId, string userId, CancellationToken cancellationToken)

@@ -3,7 +3,6 @@ using ScotchScore.Application.Common;
 using ScotchScore.Application.Contracts;
 using ScotchScore.Application.Mappers;
 using ScotchScore.Contracts;
-using ReviewVote = ScotchScore.Domain.ReviewVote;
 
 namespace ScotchScore.Application.Queries;
 
@@ -32,17 +31,15 @@ public class GetReviewsQueryHandler(IReviewRepository reviewRepository, IReviewV
             return reviews.Select(r => ReviewMapper.Map(r)).ToArray();
         }
 
-        var votes = await reviewVoteRepository.GetUserVotes(request.ScotchId, request.UserId, cancellationToken);
+        var reviewToVote = await reviewVoteRepository.GetUserVotes
+        (
+            request.ScotchId, 
+            request.UserId, 
+            cancellationToken
+        );
 
-        var reviewToVote = new Dictionary<string, ReviewVote>();
-        
-        foreach (var vote in votes)
-        {
-            reviewToVote[vote.ReviewId] = vote;
-        }
-        
-        var dtos = reviews.Select(r => ReviewMapper.Map(r, reviewToVote.GetValueOrDefault(r.Id))).ToArray();
-        
-        return dtos;
+        var reviewDtos = reviews.Select(r => ReviewMapper.Map(r, reviewToVote.GetValueOrDefault(r.Id))).ToArray();
+
+        return reviewDtos;
     }
 }
