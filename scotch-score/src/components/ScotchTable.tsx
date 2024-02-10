@@ -1,7 +1,7 @@
 import { Paper, Box, Rating, useMediaQuery, useTheme } from '@mui/material';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { getScotches } from '../services/scotchService';
-import Scotch, { ScotchColumn } from '../types/scotch';
+import Scotch from '../types/scotch';
 import { useEffect, useState } from 'react';
 import {
   DataGrid,
@@ -14,6 +14,7 @@ import createScotchSearchParametersFromSearchParams from '../utils/createScotchS
 import convertToStringToStringRecord from '../utils/convertToStringToStringRecord';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import ScotchSearchParameters from '../types/scotchSearchParameters';
+import ScotchSortColumn from '../types/scotchSortColumns';
 
 const columns: GridColDef<Scotch>[] = [
   {
@@ -156,7 +157,7 @@ function ScotchTable() {
 
     setScotchSearchParameters({
       ...scotchSearchParameters,
-      sortBy: model[0].field as ScotchColumn,
+      sortBy: model[0].field as ScotchSortColumn,
       sortDirection: model[0].sort === 'asc' ? 'Ascending' : 'Descending',
     });
   };

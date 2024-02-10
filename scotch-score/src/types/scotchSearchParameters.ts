@@ -1,11 +1,11 @@
-import { ScotchColumn } from './scotch';
+import ScotchSortColumn from './scotchSortColumns';
 import SortDirection from './sortDirection';
 
 interface ScotchSearchParameters {
   name?: string;
   pageIndex?: number;
   pageSize?: number;
-  sortBy?: ScotchColumn;
+  sortBy?: ScotchSortColumn;
   sortDirection?: SortDirection;
 }
 

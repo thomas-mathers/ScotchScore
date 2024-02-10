@@ -17,8 +17,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { postReview } from '../services/reviewService';
 import CreateReviewRequest from '../types/createReviewRequest';
 import Review from '../types/review';
-import useUser from '../hooks/useUser';
+import useAccessToken from '../hooks/useAccessToken';
 import { useEffect } from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
 
 interface NewReviewDialogProps {
   scotchId: string;
@@ -36,7 +37,8 @@ function NewReviewDialog({
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
-  const { user, accessToken } = useUser();
+  const { user } = useAuth0();
+  const { accessToken } = useAccessToken();
 
   const { control, register, handleSubmit, formState, setValue } =
     useForm<CreateReviewRequest>();

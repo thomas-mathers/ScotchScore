@@ -3,23 +3,23 @@ using ScotchScore.Application.Common;
 using ScotchScore.Application.Contracts;
 using ScotchScore.Application.Mappers;
 using ScotchScore.Contracts;
-using ReviewVoteType = ScotchScore.Domain.ReviewVoteType;
 
 namespace ScotchScore.Application.Commands;
 
-public class UpvoteReviewCommand
+public class CreateReviewVoteCommand
 {
     public string ReviewId { get; init; } = string.Empty;
     public string UserId { get; init; } = string.Empty;
+    public ReviewVoteType ReviewVoteType { get; init; }
 }
 
-public class UpvoteReviewCommandHandler(
+public class CreateReviewVoteCommandHandler(
     IReviewRepository reviewRepository,
     IReviewVoteRepository reviewVoteRepository,
     IUnitOfWork unitOfWork)
-    : IRequestHandler<UpvoteReviewCommand, Result<ReviewVote>>
+    : IRequestHandler<CreateReviewVoteCommand, Result<ReviewVote>>
 {
-    public async Task<Result<ReviewVote>> Handle(UpvoteReviewCommand request, CancellationToken cancellationToken)
+    public async Task<Result<ReviewVote>> Handle(CreateReviewVoteCommand request, CancellationToken cancellationToken)
     {
         var review = await reviewRepository.GetReview(request.ReviewId, cancellationToken);
 
@@ -34,15 +34,24 @@ public class UpvoteReviewCommandHandler(
         {
             return Result<ReviewVote>.Conflict();
         }
-
-        review.Upvotes++;
+        
+        if (request.ReviewVoteType == ReviewVoteType.Upvote)
+        {
+            review.Upvotes++;
+        }
+        else
+        {
+            review.Downvotes++;
+        }
 
         var vote = new Domain.ReviewVote
         {
             ScotchId = review.ScotchId,
             ReviewId = review.Id,
             UserId = request.UserId,
-            ReviewVoteType = ReviewVoteType.Upvote
+            ReviewVoteType = request.ReviewVoteType == ReviewVoteType.Upvote
+                ? Domain.ReviewVoteType.Upvote
+                : Domain.ReviewVoteType.Downvote
         };
 
         reviewVoteRepository.Add(vote);

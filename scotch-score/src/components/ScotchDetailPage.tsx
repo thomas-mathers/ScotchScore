@@ -6,21 +6,20 @@ import ReviewListItem from './ReviewListItem';
 import NewReviewDialog from './NewReviewDialog';
 import { useState } from 'react';
 import { getScotch } from '../services/scotchService';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import {
-  downvoteReview,
-  getReviews,
-  upvoteReview,
-} from '../services/reviewService';
+import { useQuery } from '@tanstack/react-query';
+import { getReviews } from '../services/reviewService';
 import ImageGallery, { ReactImageGalleryItem } from 'react-image-gallery';
 import 'react-image-gallery/styles/css/image-gallery.css';
-import Review from '../types/review';
-import useUser from '../hooks/useUser';
+import useAccessToken from '../hooks/useAccessToken';
+import ReviewSearchParameters from '../types/reviewSearchParameters';
 
 function ScotchDetailPage() {
   const { id } = useParams();
 
-  const { accessToken } = useUser();
+  const { loading, accessToken } = useAccessToken();
+
+  const [reviewSearchParameters, _setReviewSearchParameters] =
+    useState<ReviewSearchParameters>({ pageIndex: 0, pageSize: 20 });
 
   const scotch = useQuery({
     queryKey: ['scotches', id],
@@ -28,33 +27,13 @@ function ScotchDetailPage() {
   });
 
   const reviews = useQuery({
-    queryKey: ['reviews', id, accessToken],
-    queryFn: () => getReviews(id!, 0, 100, accessToken),
-  });
-
-  const queryClient = useQueryClient();
-
-  const upvoteMutation = useMutation<Review, unknown, string>({
-    mutationFn: (id) => upvoteReview(id, accessToken),
-    mutationKey: ['upvoteReview', id, accessToken],
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['reviews', id] });
-    },
-  });
-
-  const downvoteMutation = useMutation<Review, unknown, string>({
-    mutationFn: (id) => downvoteReview(id, accessToken),
-    mutationKey: ['downvoteReview', id, accessToken],
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['reviews', id] });
-    },
+    queryKey: ['reviews', id],
+    queryFn: () => getReviews(id!, reviewSearchParameters, accessToken),
+    enabled: Boolean(id) && !loading,
   });
 
   const [rating, setRating] = useState<number | null>(0);
   const [newReviewDialogOpen, setNewReviewDialogOpen] = useState(false);
-
-  const handleUpvote = (review: Review) => upvoteMutation.mutate(review.id);
-  const handleDownvote = (review: Review) => downvoteMutation.mutate(review.id);
 
   const items: ReactImageGalleryItem[] | undefined = scotch.data?.images.map(
     (src) => ({
@@ -111,12 +90,7 @@ function ScotchDetailPage() {
           </Grid>
           <h3>Reviews</h3>
           {reviews.data?.map((review) => (
-            <ReviewListItem
-              key={review.id}
-              review={review}
-              onUpvote={handleUpvote}
-              onDownvote={handleDownvote}
-            />
+            <ReviewListItem key={review.id} review={review} />
           ))}
         </Box>
       </Paper>

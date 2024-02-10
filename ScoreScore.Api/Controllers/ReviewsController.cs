@@ -14,27 +14,29 @@ namespace ScoreScore.Api.Controllers;
 [Consumes("application/json")]
 [Produces("application/json")]
 public class ReviewsController(
-    IRequestHandler<UpvoteReviewCommand, Result<ReviewVote>> upvoteReviewCommandHandler,
-    IRequestHandler<DownvoteReviewCommand, Result<ReviewVote>> downvoteReviewCommandHandler)
+    IRequestHandler<CreateReviewVoteCommand, Result<ReviewVote>> createReviewCommandHandler,
+    IRequestHandler<DeleteReviewVoteCommand, Result<bool>> deleteReviewVoteCommandHandler)
     : ControllerBase
 {
     [Authorize]
     [ClaimsFilter]
-    [HttpPost("{reviewId}/upvote")]
+    [HttpPost("{reviewId}/votes")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(409)]
-    public async Task<ActionResult<ReviewVote>> Upvote(string? userId, string reviewId,
+    public async Task<ActionResult<ReviewVote>> CreateVote(string? userId, string reviewId,
+        CreateReviewVoteRequest request,
         CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(userId);
 
-        var result = await upvoteReviewCommandHandler.Handle
+        var result = await createReviewCommandHandler.Handle
         (
-            new UpvoteReviewCommand
+            new CreateReviewVoteCommand
             {
                 UserId = userId,
-                ReviewId = reviewId
+                ReviewId = reviewId,
+                ReviewVoteType = request.ReviewVoteType
             },
             cancellationToken
         );
@@ -44,21 +46,20 @@ public class ReviewsController(
 
     [Authorize]
     [ClaimsFilter]
-    [HttpPost("{reviewId}/downvote")]
+    [HttpDelete("{reviewId}/votes/{reviewVoteId}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
-    [ProducesResponseType(409)]
-    public async Task<ActionResult<ReviewVote>> Downvote(string? userId, string reviewId,
+    public async Task<ActionResult<bool>> DeleteVote(string? userId, string reviewId, string reviewVoteId,
         CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(userId);
 
-        var result = await downvoteReviewCommandHandler.Handle
+        var result = await deleteReviewVoteCommandHandler.Handle
         (
-            new DownvoteReviewCommand
+            new DeleteReviewVoteCommand
             {
                 UserId = userId,
-                ReviewId = reviewId
+                ReviewVoteId = reviewVoteId
             },
             cancellationToken
         );

@@ -61,4 +61,34 @@ async function postJson<T>(
   return data;
 }
 
-export { getJson, postJson };
+async function deleteJson<T>(
+  endpoint: string,
+  queryParameters: { [key: string]: any } = {},
+  headers: { [key: string]: any } = {},
+): Promise<T> {
+  var url = new URL(`${process.env.REACT_APP_API_BASE_URL}/${endpoint}`);
+
+  for (const [key, value] of Object.entries(queryParameters)) {
+    if (value) {
+      url.searchParams.append(key, value);
+    }
+  }
+
+  const response = await fetch(url.href, {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json',
+      ...headers,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  }
+
+  const data = await response.json();
+
+  return data;
+}
+
+export { getJson, postJson, deleteJson };

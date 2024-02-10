@@ -1,18 +1,17 @@
 import CreateReviewRequest from '../types/createReviewRequest';
+import CreateReviewVoteRequest from '../types/createReviewVoteRequest';
 import Review from '../types/review';
-import { getJson, postJson } from './apiService';
+import ReviewSearchParameters from '../types/reviewSearchParameters';
+import { deleteJson, getJson, postJson } from './apiService';
 
 async function getReviews(
   scotchId: string,
-  pageIndex: number = 0,
-  pageSize: number = 100,
+  searchParameters: ReviewSearchParameters,
   accessToken?: string,
 ): Promise<Review[]> {
-  return getJson(
-    `scotches/${scotchId}/reviews`,
-    { pageIndex, pageSize },
-    { Authorization: `Bearer ${accessToken}` },
-  );
+  return getJson(`scotches/${scotchId}/reviews`, searchParameters, {
+    Authorization: `Bearer ${accessToken}`,
+  });
 }
 
 async function postReview(
@@ -30,28 +29,29 @@ async function postReview(
   );
 }
 
-async function upvoteReview(
+async function createVote(
   reviewId: string,
+  createReviewVoteRequest: CreateReviewVoteRequest,
   accessToken: string,
 ): Promise<Review> {
   return postJson(
-    `reviews/${reviewId}/upvote`,
-    {},
+    `reviews/${reviewId}/votes`,
+    createReviewVoteRequest,
     {},
     { Authorization: `Bearer ${accessToken}` },
   );
 }
 
-async function downvoteReview(
+async function deleteVote(
   reviewId: string,
+  reviewVoteId: string,
   accessToken: string,
-): Promise<Review> {
-  return postJson(
-    `reviews/${reviewId}/downvote`,
-    {},
+): Promise<boolean> {
+  return deleteJson(
+    `reviews/${reviewId}/votes/${reviewVoteId}`,
     {},
     { Authorization: `Bearer ${accessToken}` },
   );
 }
 
-export { getReviews, postReview, upvoteReview, downvoteReview };
+export { getReviews, postReview, createVote, deleteVote };

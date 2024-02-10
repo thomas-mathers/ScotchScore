@@ -1,3 +1,5 @@
+import ReviewVote from './reviewVote';
+
 interface Review {
   id: string;
   scotchId: string;
@@ -10,6 +12,7 @@ interface Review {
   upvotes: number;
   downvotes: number;
   dateCreated: Date;
+  userVote?: ReviewVote;
 }
 
 export default Review;

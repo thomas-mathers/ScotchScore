@@ -1,5 +1,5 @@
-import { ScotchColumn } from '../types/scotch';
 import ScotchSearchParameters from '../types/scotchSearchParameters';
+import ScotchSortColumn from '../types/scotchSortColumns';
 import SortDirection from '../types/sortDirection';
 
 function createScotchSearchParametersFromSearchParams(
@@ -26,7 +26,7 @@ function createScotchSearchParametersFromSearchParams(
   }
 
   if (sortBy) {
-    scotchSearchParameters.sortBy = sortBy as ScotchColumn;
+    scotchSearchParameters.sortBy = sortBy as ScotchSortColumn;
   }
 
   if (sortDirection) {
