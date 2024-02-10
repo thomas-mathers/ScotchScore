@@ -2,7 +2,15 @@ import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
-import { Avatar, Box, Divider, Grid, IconButton, Rating } from '@mui/material';
+import {
+  Avatar,
+  Box,
+  Divider,
+  Grid,
+  IconButton,
+  Rating,
+  Tooltip,
+} from '@mui/material';
 import TimeAgo from 'react-timeago';
 
 import Review from '../types/review';
@@ -10,6 +18,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createVote, deleteVote, updateVote } from '../services/reviewService';
 import useAccessToken from '../hooks/useAccessToken';
 import ReviewVoteType from '../types/reviewVoteType';
+import { useAuth0 } from '@auth0/auth0-react';
 
 interface ReviewListItemProps {
   review: Review;
@@ -17,6 +26,8 @@ interface ReviewListItemProps {
 
 function ReviewListItem(props: ReviewListItemProps) {
   const { review } = props;
+
+  const { isAuthenticated } = useAuth0();
 
   const { accessToken } = useAccessToken();
 
@@ -103,15 +114,35 @@ function ReviewListItem(props: ReviewListItemProps) {
         <Grid item xs={12} sm="auto">
           <Grid container spacing={1}>
             <Grid item>
-              <IconButton size="small" onClick={handleClickUpvote}>
-                {isUpvoted ? <ThumbUpIcon /> : <ThumbUpOutlinedIcon />}
-              </IconButton>
+              <Tooltip title={isAuthenticated ? '' : 'Login to vote'}>
+                <span>
+                  <IconButton
+                    size="small"
+                    onClick={handleClickUpvote}
+                    disabled={!isAuthenticated}
+                  >
+                    {isUpvoted ? <ThumbUpIcon /> : <ThumbUpOutlinedIcon />}
+                  </IconButton>
+                </span>
+              </Tooltip>
               ({review.upvotes})
             </Grid>
             <Grid item>
-              <IconButton size="small" onClick={handleClickDownvote}>
-                {isDownvoted ? <ThumbDownIcon /> : <ThumbDownOutlinedIcon />}
-              </IconButton>
+              <Tooltip title={isAuthenticated ? '' : 'Login to vote'}>
+                <span>
+                  <IconButton
+                    size="small"
+                    onClick={handleClickDownvote}
+                    disabled={!isAuthenticated}
+                  >
+                    {isDownvoted ? (
+                      <ThumbDownIcon />
+                    ) : (
+                      <ThumbDownOutlinedIcon />
+                    )}
+                  </IconButton>
+                </span>
+              </Tooltip>
               ({review.downvotes})
             </Grid>
           </Grid>

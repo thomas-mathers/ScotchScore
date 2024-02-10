@@ -1,4 +1,4 @@
-import { Box, Grid, Paper, Rating } from '@mui/material';
+import { Box, Grid, Paper, Rating, Tooltip } from '@mui/material';
 import { Navigate, useParams } from 'react-router-dom';
 import RatingHistogram from './RatingHistogram';
 import RatingSummary from './RatingSummary';
@@ -12,9 +12,12 @@ import ImageGallery, { ReactImageGalleryItem } from 'react-image-gallery';
 import 'react-image-gallery/styles/css/image-gallery.css';
 import useAccessToken from '../hooks/useAccessToken';
 import ReviewSearchParameters from '../types/reviewSearchParameters';
+import { useAuth0 } from '@auth0/auth0-react';
 
 function ScotchDetailPage() {
   const { id } = useParams();
+
+  const { isAuthenticated } = useAuth0();
 
   const { loading, accessToken } = useAccessToken();
 
@@ -80,12 +83,16 @@ function ScotchDetailPage() {
             </Grid>
             <Grid item xs={12} md={4}>
               <p>Review this product</p>
-              <Rating
-                disabled={!accessToken}
-                value={rating}
-                onChange={(_e, newRating) => setRating(newRating)}
-                onClick={() => setNewReviewDialogOpen(true)}
-              />
+              <Tooltip title={isAuthenticated ? '' : 'Login to review'}>
+                <span>
+                  <Rating
+                    disabled={!isAuthenticated}
+                    value={rating}
+                    onChange={(_e, newRating) => setRating(newRating)}
+                    onClick={() => setNewReviewDialogOpen(true)}
+                  />
+                </span>
+              </Tooltip>
             </Grid>
           </Grid>
           <h3>Reviews</h3>
