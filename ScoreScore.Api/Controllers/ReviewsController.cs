@@ -15,6 +15,7 @@ namespace ScoreScore.Api.Controllers;
 [Produces("application/json")]
 public class ReviewsController(
     IRequestHandler<CreateReviewVoteCommand, Result<ReviewVote>> createReviewCommandHandler,
+    IRequestHandler<UpdateReviewVoteCommand, Result<ReviewVote>> updateReviewVoteCommandHandler,
     IRequestHandler<DeleteReviewVoteCommand, Result<bool>> deleteReviewVoteCommandHandler)
     : ControllerBase
 {
@@ -43,11 +44,38 @@ public class ReviewsController(
 
         return result.ToActionResult(this);
     }
+    
+    [Authorize]
+    [ClaimsFilter]
+    [HttpPut("{reviewId}/votes/{reviewVoteId}")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(403)]
+    [ProducesResponseType(404)]
+    public async Task<ActionResult<ReviewVote>> UpdateVote(string? userId, string reviewId, string reviewVoteId,
+        UpdateReviewVoteRequest request, CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(userId);
+
+        var result = await updateReviewVoteCommandHandler.Handle
+        (
+            new UpdateReviewVoteCommand
+            {
+                UserId = userId,
+                ReviewVoteId = reviewVoteId,
+                ReviewVoteType = request.ReviewVoteType
+            },
+            cancellationToken
+        );
+
+        return result.ToActionResult(this);
+    }    
+    
 
     [Authorize]
     [ClaimsFilter]
     [HttpDelete("{reviewId}/votes/{reviewVoteId}")]
     [ProducesResponseType(200)]
+    [ProducesResponseType(403)]
     [ProducesResponseType(404)]
     public async Task<ActionResult<bool>> DeleteVote(string? userId, string reviewId, string reviewVoteId,
         CancellationToken cancellationToken)

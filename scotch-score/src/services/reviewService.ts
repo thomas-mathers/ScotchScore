@@ -2,7 +2,8 @@ import CreateReviewRequest from '../types/createReviewRequest';
 import CreateReviewVoteRequest from '../types/createReviewVoteRequest';
 import Review from '../types/review';
 import ReviewSearchParameters from '../types/reviewSearchParameters';
-import { deleteJson, getJson, postJson } from './apiService';
+import UpdateReviewVoteRequest from '../types/updateReviewVoteRequest';
+import { deleteJson, getJson, postJson, putJson } from './apiService';
 
 async function getReviews(
   scotchId: string,
@@ -42,6 +43,20 @@ async function createVote(
   );
 }
 
+async function updateVote(
+  reviewId: string,
+  reviewVoteId: string,
+  updateReviewVoteRequest: UpdateReviewVoteRequest,
+  accessToken: string,
+): Promise<Review> {
+  return putJson(
+    `reviews/${reviewId}/votes/${reviewVoteId}`,
+    updateReviewVoteRequest,
+    {},
+    { Authorization: `Bearer ${accessToken}` },
+  );
+}
+
 async function deleteVote(
   reviewId: string,
   reviewVoteId: string,
@@ -54,4 +69,4 @@ async function deleteVote(
   );
 }
 
-export { getReviews, postReview, createVote, deleteVote };
+export { getReviews, postReview, createVote, updateVote, deleteVote };

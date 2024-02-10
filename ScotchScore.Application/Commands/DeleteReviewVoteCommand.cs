@@ -6,7 +6,7 @@ namespace ScotchScore.Application.Commands;
 
 public class DeleteReviewVoteCommand
 {
-    public string UserId { get; set; } = string.Empty;
+    public string UserId { get; init; } = string.Empty;
     public string ReviewVoteId { get; init; } = string.Empty;
 }
 

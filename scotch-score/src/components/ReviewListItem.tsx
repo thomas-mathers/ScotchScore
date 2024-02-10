@@ -7,8 +7,9 @@ import TimeAgo from 'react-timeago';
 
 import Review from '../types/review';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createVote, deleteVote } from '../services/reviewService';
+import { createVote, deleteVote, updateVote } from '../services/reviewService';
 import useAccessToken from '../hooks/useAccessToken';
+import ReviewVoteType from '../types/reviewVoteType';
 
 interface ReviewListItemProps {
   review: Review;
@@ -21,27 +22,41 @@ function ReviewListItem(props: ReviewListItemProps) {
 
   const queryClient = useQueryClient();
 
-  const upvoteMutation = useMutation<Review>({
-    mutationFn: () =>
-      createVote(review.id, { reviewVoteType: 'Upvote' }, accessToken),
+  const createVoteMutation = useMutation<
+    Review,
+    Error,
+    ReviewVoteType,
+    unknown
+  >({
+    mutationFn: (reviewVoteType: ReviewVoteType) =>
+      createVote(review.id, { reviewVoteType }, accessToken),
     mutationKey: ['upvoteReview', review.id, accessToken],
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['reviews', review.scotchId] });
     },
   });
 
-  const downvoteMutation = useMutation<Review>({
-    mutationFn: () =>
-      createVote(review.id, { reviewVoteType: 'Downvote' }, accessToken),
-    mutationKey: ['downvoteReview', review.id, accessToken],
+  const updateVoteMutation = useMutation<
+    Review,
+    Error,
+    ReviewVoteType,
+    unknown
+  >({
+    mutationFn: (reviewVoteType: ReviewVoteType) =>
+      updateVote(
+        review.id,
+        review.userVote!.id,
+        { reviewVoteType },
+        accessToken,
+      ),
+    mutationKey: ['updateVote', review.id, accessToken],
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['reviews', review.scotchId] });
     },
   });
 
-  const deleteMutation = useMutation<boolean, Error, string, unknown>({
-    mutationFn: (reviewVoteId) =>
-      deleteVote(review.id, reviewVoteId, accessToken),
+  const deleteVoteMutation = useMutation<boolean>({
+    mutationFn: () => deleteVote(review.id, review.userVote!.id, accessToken),
     mutationKey: ['deleteVote', review.id, accessToken],
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['reviews', review.scotchId] });
@@ -53,20 +68,30 @@ function ReviewListItem(props: ReviewListItemProps) {
 
   const handleClickUpvote = () => {
     if (isUpvoted) {
-      deleteMutation.mutate(review.userVote!.id);
+      deleteVoteMutation.mutate();
       return;
     }
 
-    upvoteMutation.mutate();
+    if (isDownvoted) {
+      updateVoteMutation.mutate('Upvote');
+      return;
+    }
+
+    createVoteMutation.mutate('Upvote');
   };
 
   const handleClickDownvote = () => {
     if (isDownvoted) {
-      deleteMutation.mutate(review.userVote!.id);
+      deleteVoteMutation.mutate();
       return;
     }
 
-    downvoteMutation.mutate();
+    if (isUpvoted) {
+      updateVoteMutation.mutate('Downvote');
+      return;
+    }
+
+    createVoteMutation.mutate('Downvote');
   };
 
   return (

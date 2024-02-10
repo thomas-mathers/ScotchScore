@@ -22,7 +22,11 @@ public static class ServiceCollectionExtensions
         serviceCollection
             .AddScoped<IRequestHandler<CreateReviewVoteCommand, Result<ReviewVote>>, CreateReviewVoteCommandHandler>();
         serviceCollection
+            .AddScoped<IRequestHandler<UpdateReviewVoteCommand, Result<ReviewVote>>, UpdateReviewVoteCommandHandler>();
+        serviceCollection
             .AddScoped<IRequestHandler<DeleteReviewVoteCommand, Result<bool>>, DeleteReviewVoteCommandHandler>();
+        
+        
 
         return serviceCollection;
     }
