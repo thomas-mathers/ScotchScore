@@ -15,6 +15,23 @@ async function getReviews(
   });
 }
 
+async function getUserReview(
+  scotchId: string,
+  userId: string,
+  accessToken: string,
+): Promise<Review | undefined> {
+  const reviews = await getJson<Review[]>(
+    `scotches/${scotchId}/reviews`,
+    {
+      userId,
+    },
+    {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  );
+  return reviews.length > 0 ? reviews[0] : undefined;
+}
+
 async function postReview(
   scotchId: string,
   createReviewRequest: CreateReviewRequest,
@@ -69,4 +86,11 @@ async function deleteVote(
   );
 }
 
-export { getReviews, postReview, createVote, updateVote, deleteVote };
+export {
+  getReviews,
+  getUserReview,
+  postReview,
+  createVote,
+  updateVote,
+  deleteVote,
+};

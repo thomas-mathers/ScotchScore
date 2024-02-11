@@ -60,7 +60,7 @@ function ReviewListItem(props: ReviewListItemProps) {
         { reviewVoteType },
         accessToken,
       ),
-    mutationKey: ['updateVote', review.id, accessToken],
+    mutationKey: ['updateVote', review.id, review.userVote?.id, accessToken],
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['reviews', review.scotchId] });
     },
@@ -68,7 +68,7 @@ function ReviewListItem(props: ReviewListItemProps) {
 
   const deleteVoteMutation = useMutation<boolean>({
     mutationFn: () => deleteVote(review.id, review.userVote!.id, accessToken),
-    mutationKey: ['deleteVote', review.id, accessToken],
+    mutationKey: ['deleteVote', review.id, review.userVote?.id, accessToken],
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['reviews', review.scotchId] });
     },
