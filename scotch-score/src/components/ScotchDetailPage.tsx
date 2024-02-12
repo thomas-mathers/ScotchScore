@@ -1,5 +1,5 @@
 import { Box, Grid, Paper, Rating, Tooltip } from '@mui/material';
-import { Navigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import RatingHistogram from './RatingHistogram';
 import RatingSummary from './RatingSummary';
 import ReviewListItem from './ReviewListItem';
