@@ -9,9 +9,6 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-variables:
-  project: score-score  
-
 steps:
 - task: NodeTool@0
   inputs:
@@ -21,19 +18,19 @@ steps:
 - task: Npm@1
   inputs:
     command: 'install'
-    workingDir: '$(project)'
+    workingDir: '$(Build.SourcesDirectory)/ScotchScore/scotch-score'
   displayName: 'npm install'
 
 - task: Npm@1
   inputs:
     command: 'custom'
-    workingDir: '$(project)'
+    workingDir: '$(Build.SourcesDirectory)/ScotchScore/scotch-score'
     customCommand: 'run test:ci'
   displayName: 'npm run test:ci'
   
 - task: Npm@1
   inputs:
     command: 'custom'
-    workingDir: '$(project)'
+    workingDir: '$(Build.SourcesDirectory)/ScotchScore/scotch-score'
     customCommand: 'run build'
   displayName: 'npm run build'
