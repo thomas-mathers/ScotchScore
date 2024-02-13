@@ -19,19 +19,19 @@ steps:
 - task: Npm@1
   inputs:
     command: 'install'
-    workingDir: '$(Build.SourcesDirectory)/ScotchScore/scotch-score'
+    workingDir: '$(Build.SourcesDirectory)/scotch-score'
   displayName: 'npm install'
 
 - task: Npm@1
   inputs:
     command: 'custom'
-    workingDir: '$(Build.SourcesDirectory)/ScotchScore/scotch-score'
+    workingDir: '$(Build.SourcesDirectory)/scotch-score'
     customCommand: 'run test:ci'
   displayName: 'npm run test:ci'
   
 - task: Npm@1
   inputs:
     command: 'custom'
-    workingDir: '$(Build.SourcesDirectory)/ScotchScore/scotch-score'
+    workingDir: '$(Build.SourcesDirectory)/scotch-score'
     customCommand: 'run build'
   displayName: 'npm run build'
