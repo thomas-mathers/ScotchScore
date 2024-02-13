@@ -41,7 +41,7 @@ steps:
     rootFolderOrFile: '$(Build.SourcesDirectory)/scotch-score/build'
     includeRootFolder: false
     archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/scotch-score.zip'
     replaceExistingArchive: true
   
 - task: PublishBuildArtifacts@1
@@ -49,5 +49,5 @@ steps:
   displayName: 'Publish build artifacts'
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'Frontend'
+    ArtifactName: 'scotch-score'
     publishLocation: 'Container'
