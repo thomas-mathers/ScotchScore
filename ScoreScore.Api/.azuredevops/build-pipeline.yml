@@ -50,5 +50,5 @@ steps:
   displayName: 'Publish build artifacts'
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'ScotchScore'
+    ArtifactName: 'ScotchScore.Api'
     publishLocation: 'Container'
