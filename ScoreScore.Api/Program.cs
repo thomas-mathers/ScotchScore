@@ -28,8 +28,8 @@ builder.Services
     })
     .AddJwtBearer(options =>
     {
-        options.Authority = "https://thomasmathers.us.auth0.com/";
-        options.Audience = "http://localhost:3000/";
+        options.Authority = configuration["Auth0:Authority"];
+        options.Audience = configuration["Auth0:Audience"];
     });
 
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
