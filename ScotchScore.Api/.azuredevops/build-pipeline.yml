@@ -17,7 +17,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution: '**/ScotchScore.sln'
-  project: '**/ScoreScore.Api.csproj'
+  project: '**/ScotchScore.Api.csproj'
 
 steps:
 - task: NuGetToolInstaller@1
