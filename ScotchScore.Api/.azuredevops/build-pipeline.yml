@@ -4,7 +4,11 @@ trigger:
       - main
   paths:
     include:
-      - ScoreScore.Api
+      - ScotchScore.Api
+      - ScotchScore.Application
+      - ScotchScore.Contracts
+      - ScotchScore.Domain
+      - ScotchScore.Infrastructure
 
 pool:
   vmImage: ubuntu-latest
