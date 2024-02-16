@@ -1,10 +1,11 @@
-import { Container, Box, AppBar, Grid, Hidden } from '@mui/material';
+import { useAuth0 } from '@auth0/auth0-react';
+import { AppBar, Box, Container, Grid, Hidden } from '@mui/material';
 import { Outlet } from 'react-router-dom';
+
+import LoginButton from './LoginButton';
+import LogoButton from './LogoButton';
 import SearchBar from './SearchBar';
 import UserMenu from './UserMenu';
-import LogoButton from './LogoButton';
-import { useAuth0 } from '@auth0/auth0-react';
-import LoginButton from './LoginButton';
 
 function Root() {
   const { isAuthenticated } = useAuth0();

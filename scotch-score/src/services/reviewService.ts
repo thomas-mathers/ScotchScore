@@ -87,10 +87,10 @@ async function deleteVote(
 }
 
 export {
+  createVote,
+  deleteVote,
   getReviews,
   getUserReview,
   postReview,
-  createVote,
   updateVote,
-  deleteVote,
 };

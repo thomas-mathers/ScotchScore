@@ -124,4 +124,4 @@ async function deleteJson<T>(
   return data;
 }
 
-export { postJson, getJson, putJson, deleteJson };
+export { deleteJson, getJson, postJson, putJson };

@@ -12,4 +12,4 @@ async function getScotch(id: string): Promise<Scotch | undefined> {
   return getJson(`scotches/${id}`);
 }
 
-export { getScotches, getScotch };
+export { getScotch, getScotches };
