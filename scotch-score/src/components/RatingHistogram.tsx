@@ -8,7 +8,6 @@ function RatingHistogram({ ratings }: RatingHistogramProps) {
   const totalRatings = ratings.reduce((acc, rating) => acc + rating, 0);
   return (
     <Box>
-      <p>Ratings Snapshot</p>
       {ratings
         .slice()
         .reverse()

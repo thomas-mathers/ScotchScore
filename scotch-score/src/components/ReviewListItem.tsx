@@ -10,6 +10,7 @@ import {
   IconButton,
   Rating,
   Tooltip,
+  Typography,
 } from '@mui/material';
 import TimeAgo from 'react-timeago';
 
@@ -125,7 +126,9 @@ function ReviewListItem(props: ReviewListItemProps) {
                   </IconButton>
                 </span>
               </Tooltip>
-              ({review.upvotes})
+              <Typography variant="subtitle2" component="span">
+                ({review.upvotes})
+              </Typography>
             </Grid>
             <Grid item>
               <Tooltip title={isAuthenticated ? '' : 'Login to vote'}>
@@ -143,7 +146,9 @@ function ReviewListItem(props: ReviewListItemProps) {
                   </IconButton>
                 </span>
               </Tooltip>
-              ({review.downvotes})
+              <Typography variant="subtitle2" component="span">
+                ({review.downvotes})
+              </Typography>
             </Grid>
           </Grid>
         </Grid>

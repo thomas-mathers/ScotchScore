@@ -10,13 +10,12 @@ interface RatingSummaryProps {
 function RatingSummary(props: RatingSummaryProps) {
   return (
     <Box>
-      <p>Overall Rating</p>
       <Grid container gap={2}>
         <Grid item>
           <Typography variant="h3">{props.rating.toFixed(1)}</Typography>
         </Grid>
         <Grid item xs>
-          <Rating value={props.rating} precision={0.1} readOnly />
+          <Rating value={props.rating} precision={0.1} size="large" readOnly />
           <Box>{`${props.numberOfRatings} ratings`}</Box>
         </Grid>
         <Grid

@@ -12,9 +12,12 @@ public class ScotchRepository(DatabaseContext databaseContext) : IScotchReposito
         new()
         {
             [ScotchSortColumn.Name] = scotch => scotch.Name,
+            [ScotchSortColumn.Distillery] = scotch => scotch.Distillery,
             [ScotchSortColumn.Region] = scotch => scotch.Region,
             [ScotchSortColumn.Age] = scotch => scotch.Age,
-            [ScotchSortColumn.Amount] = scotch => scotch.Amount
+            [ScotchSortColumn.Amount] = scotch => scotch.Amount,
+            [ScotchSortColumn.AverageRating] = scotch => scotch.AverageRating,
+            [ScotchSortColumn.DateCreated] = scotch => scotch.DateCreated
         };
 
     public async Task<IReadOnlyList<Scotch>> GetScotches

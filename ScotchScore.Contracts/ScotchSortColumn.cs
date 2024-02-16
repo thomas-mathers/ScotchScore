@@ -7,6 +7,7 @@ namespace ScotchScore.Contracts
         Region,
         Age,
         Amount,
-        DateCreated
+        AverageRating,
+        DateCreated,
     }
 }
