@@ -1,20 +1,21 @@
-import { Paper, Box, Rating, useMediaQuery, useTheme } from '@mui/material';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { getScotches } from '../services/scotchService';
-import Scotch from '../types/scotch';
-import { useEffect, useState } from 'react';
+import { Box, Paper, Rating, useMediaQuery, useTheme } from '@mui/material';
 import {
   DataGrid,
   GridColDef,
   GridPaginationModel,
   GridSortModel,
 } from '@mui/x-data-grid';
-import formatCurrency from '../utils/formatCurrency';
-import createScotchSearchParametersFromSearchParams from '../utils/createScotchSearchParametersFromSearchParams';
-import convertToStringToStringRecord from '../utils/convertToStringToStringRecord';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+
+import { getScotches } from '../services/scotchService';
+import Scotch from '../types/scotch';
 import ScotchSearchParameters from '../types/scotchSearchParameters';
 import ScotchSortColumn from '../types/scotchSortColumns';
+import convertToStringToStringRecord from '../utils/convertToStringToStringRecord';
+import createScotchSearchParametersFromSearchParams from '../utils/createScotchSearchParametersFromSearchParams';
+import formatCurrency from '../utils/formatCurrency';
 
 const columns: GridColDef<Scotch>[] = [
   {

@@ -1,3 +1,7 @@
+import 'react-image-gallery/styles/css/image-gallery.css';
+import './ScotchDetailPage.css';
+
+import { useAuth0 } from '@auth0/auth0-react';
 import {
   Box,
   Divider,
@@ -7,22 +11,20 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
+import ImageGallery, { ReactImageGalleryItem } from 'react-image-gallery';
 import { useParams } from 'react-router-dom';
+
+import useAccessToken from '../hooks/useAccessToken';
+import { getReviews, getUserReview } from '../services/reviewService';
+import { getScotch } from '../services/scotchService';
+import ReviewSearchParameters from '../types/reviewSearchParameters';
+import formatCurrency from '../utils/formatCurrency';
+import NewReviewDialog from './NewReviewDialog';
 import RatingHistogram from './RatingHistogram';
 import RatingSummary from './RatingSummary';
 import ReviewListItem from './ReviewListItem';
-import NewReviewDialog from './NewReviewDialog';
-import { useEffect, useState } from 'react';
-import { getScotch } from '../services/scotchService';
-import { useQuery } from '@tanstack/react-query';
-import { getReviews, getUserReview } from '../services/reviewService';
-import ImageGallery, { ReactImageGalleryItem } from 'react-image-gallery';
-import 'react-image-gallery/styles/css/image-gallery.css';
-import './ScotchDetailPage.css';
-import useAccessToken from '../hooks/useAccessToken';
-import ReviewSearchParameters from '../types/reviewSearchParameters';
-import { useAuth0 } from '@auth0/auth0-react';
-import formatCurrency from '../utils/formatCurrency';
 
 function ScotchDetailPage() {
   const routeParams = useParams();

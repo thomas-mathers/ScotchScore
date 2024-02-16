@@ -1,18 +1,19 @@
+import { Search } from '@mui/icons-material';
 import {
-  Autocomplete,
-  TextField,
   alpha,
-  InputAdornment,
+  Autocomplete,
   CircularProgress,
+  InputAdornment,
   Link,
+  TextField,
 } from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
-import Scotch from '../types/scotch';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { useDebounce } from 'react-use';
+
 import { getScotches } from '../services/scotchService';
-import { Search } from '@mui/icons-material';
+import Scotch from '../types/scotch';
 
 function SearchBar() {
   const [name, setName] = useState<string>('');

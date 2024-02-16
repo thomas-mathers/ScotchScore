@@ -1,4 +1,4 @@
-import { LinearProgress, Box } from '@mui/material';
+import { Box, LinearProgress } from '@mui/material';
 
 interface RatingHistogramProps {
   ratings: number[];

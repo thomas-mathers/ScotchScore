@@ -1,21 +1,21 @@
-import { StrictMode } from 'react';
-import ReactDOM from 'react-dom/client';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import { CssBaseline, ThemeProvider } from '@mui/material';
-
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import './index.css';
 
-import ErrorPage from './components/ErrorPage';
-import theme from './theme';
-import ScotchDetailPage from './components/ScotchDetailPage';
-import Root from './components/Root';
-import ScotchTable from './components/ScotchTable';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Auth0Provider } from '@auth0/auth0-react';
+import { CssBaseline, ThemeProvider } from '@mui/material';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { StrictMode } from 'react';
+import ReactDOM from 'react-dom/client';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+
+import ErrorPage from './components/ErrorPage';
+import Root from './components/Root';
+import ScotchDetailPage from './components/ScotchDetailPage';
+import ScotchTable from './components/ScotchTable';
+import theme from './theme';
 
 const router = createBrowserRouter([
   {

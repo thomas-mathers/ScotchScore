@@ -1,3 +1,4 @@
+import { useAuth0 } from '@auth0/auth0-react';
 import {
   Box,
   Button,
@@ -12,14 +13,14 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { Controller, useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useEffect } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+
+import useAccessToken from '../hooks/useAccessToken';
 import { postReview } from '../services/reviewService';
 import CreateReviewRequest from '../types/createReviewRequest';
 import Review from '../types/review';
-import useAccessToken from '../hooks/useAccessToken';
-import { useEffect } from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
 
 interface NewReviewDialogProps {
   scotchId: string;

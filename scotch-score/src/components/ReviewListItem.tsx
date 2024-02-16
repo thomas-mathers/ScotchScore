@@ -1,3 +1,4 @@
+import { useAuth0 } from '@auth0/auth0-react';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
@@ -12,14 +13,13 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import TimeAgo from 'react-timeago';
 
-import Review from '../types/review';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createVote, deleteVote, updateVote } from '../services/reviewService';
 import useAccessToken from '../hooks/useAccessToken';
+import { createVote, deleteVote, updateVote } from '../services/reviewService';
+import Review from '../types/review';
 import ReviewVoteType from '../types/reviewVoteType';
-import { useAuth0 } from '@auth0/auth0-react';
 
 interface ReviewListItemProps {
   review: Review;
