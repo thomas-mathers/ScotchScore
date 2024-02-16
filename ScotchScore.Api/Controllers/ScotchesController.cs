@@ -2,13 +2,13 @@ using Ardalis.Result;
 using Ardalis.Result.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ScoreScore.Api.ActionFilters;
+using ScotchScore.Api.ActionFilters;
 using ScotchScore.Application.Commands;
 using ScotchScore.Application.Common;
 using ScotchScore.Application.Queries;
 using ScotchScore.Contracts;
 
-namespace ScoreScore.Api.Controllers;
+namespace ScotchScore.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]

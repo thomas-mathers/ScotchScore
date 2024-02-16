@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScotchScore.Infrastructure"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScotchScore.Contracts", "ScotchScore.Contracts\ScotchScore.Contracts.csproj", "{0A9D2FCA-74B9-422F-B09B-48DC9360B692}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoreScore.Api", "ScoreScore.Api\ScoreScore.Api.csproj", "{0CACEB63-5F70-4F23-B350-E4D898C16CB2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScotchScore.Api", "ScotchScore.Api\ScotchScore.Api.csproj", "{0CACEB63-5F70-4F23-B350-E4D898C16CB2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

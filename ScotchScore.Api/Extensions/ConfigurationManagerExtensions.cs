@@ -1,6 +1,6 @@
 using Azure.Identity;
 
-namespace ScoreScore.Api.Extensions;
+namespace ScotchScore.Api.Extensions;
 
 public static class ConfigurationManagerExtensions
 {
