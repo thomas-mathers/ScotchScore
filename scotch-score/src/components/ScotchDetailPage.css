@@ -1,3 +1,7 @@
 .image-gallery-image {
   height: 500px;
 }
+
+.image-gallery-thumbnail-image {
+  height: 125px;
+}

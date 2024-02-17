@@ -5,9 +5,13 @@ import { useAuth0 } from '@auth0/auth0-react';
 import {
   Box,
   Divider,
+  FormControl,
   Grid,
+  InputLabel,
+  MenuItem,
   Paper,
   Rating,
+  Select,
   Tooltip,
   Typography,
 } from '@mui/material';
@@ -92,7 +96,7 @@ function ScotchDetailPage() {
               <Typography variant="body1">{scotch?.description}</Typography>
             </Grid>
           </Grid>
-          <Typography variant="h5" component="h2" gutterBottom>
+          <Typography variant="h5" component="h2" sx={{ marginBottom: 3 }}>
             <strong>Ratings</strong>
           </Typography>
           <Grid container spacing={2} marginBottom={2}>
@@ -131,9 +135,19 @@ function ScotchDetailPage() {
               </Tooltip>
             </Grid>
           </Grid>
-          <Typography variant="h5" component="h2" gutterBottom>
+          <Typography variant="h5" component="h2" sx={{ marginBottom: 3 }}>
             <strong>Reviews</strong>
           </Typography>
+          <FormControl variant="outlined">
+            <InputLabel id="sort-label">Sort by</InputLabel>
+            <Select labelId="sort-label" label="Sort by" value={10}>
+              <MenuItem value={10}>Most recent</MenuItem>
+              <MenuItem value={20}>Most helpful</MenuItem>
+              <MenuItem value={30}>Highest to lowest rating</MenuItem>
+              <MenuItem value={40}>Lowest to highest rating</MenuItem>
+            </Select>
+          </FormControl>
+          <Divider sx={{ marginBottom: 2, marginTop: 2 }} />
           {reviews?.map((review) => (
             <ReviewListItem key={review.id} review={review} />
           ))}

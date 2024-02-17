@@ -111,6 +111,9 @@ function ReviewListItem(props: ReviewListItemProps) {
       <Grid container spacing={2}>
         <Grid item xs={12} sm>
           <Rating value={review.rating} precision={0.5} readOnly />
+          <Typography variant="h6" component="h3">
+            {review.title}
+          </Typography>
         </Grid>
         <Grid item xs={12} sm="auto">
           <Grid container spacing={1}>
