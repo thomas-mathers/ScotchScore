@@ -35,8 +35,15 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:types": "tsc --noEmit",
     "test:ci": "react-scripts test --watchAll=false --passWithNoTests",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint --cache --ignore-path .eslintignore --ext ts,tsx .",
+    "lint:errors": "eslint --cache --ignore-path .eslintignore --ext ts,tsx --quiet .",
+    "lint:fix": "eslint --cache --ignore-path .eslintignore --ext ts,tsx --fix .",
+    "format": "prettier --cache --log-level warn --check \"src/**/*.{ts,tsx,html}\"",
+    "format:fix": "prettier --cache --log-level warn --write \"src/**/*.{ts,tsx,html}\"",
+    "fix": "npm run lint:fix && npm run format:fix"
   },
   "browserslist": {
     "production": [
