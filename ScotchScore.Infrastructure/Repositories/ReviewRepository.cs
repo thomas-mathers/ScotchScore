@@ -29,7 +29,7 @@ public class ReviewRepository(DatabaseContext databaseContext) : IReviewReposito
             .FirstOrDefaultAsync(x => x.ScotchId == scotchId && x.UserId == userId, cancellationToken);
     }
 
-    public async Task<IReadOnlyList<Review>> GetReviews
+    public async Task<Page<Review>> GetReviews
     (
         string scotchId,
         ReviewSearchParameters searchParameters,
@@ -62,13 +62,15 @@ public class ReviewRepository(DatabaseContext databaseContext) : IReviewReposito
         {
             query = query.Where(x => x.UserId == searchParameters.UserId);
         }
+        
+        var totalReviews = await query.CountAsync(cancellationToken);
 
         var reviews = await query
             .Skip(searchParameters.PageIndex * searchParameters.PageSize)
             .Take(searchParameters.PageSize)
             .ToArrayAsync(cancellationToken);
 
-        return reviews;
+        return new Page<Review>(searchParameters.PageIndex, searchParameters.PageSize, totalReviews, reviews);
     }
 
     public void Add(Review review)

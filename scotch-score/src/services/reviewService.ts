@@ -1,5 +1,6 @@
 import CreateReviewRequest from '../types/createReviewRequest';
 import CreateReviewVoteRequest from '../types/createReviewVoteRequest';
+import Page from '../types/page';
 import Review from '../types/review';
 import ReviewSearchParameters from '../types/reviewSearchParameters';
 import UpdateReviewVoteRequest from '../types/updateReviewVoteRequest';
@@ -9,7 +10,7 @@ async function getReviews(
   scotchId: string,
   searchParameters: ReviewSearchParameters,
   accessToken?: string,
-): Promise<Review[]> {
+): Promise<Page<Review>> {
   return getJson(`scotches/${scotchId}/reviews`, searchParameters, {
     Authorization: `Bearer ${accessToken}`,
   });

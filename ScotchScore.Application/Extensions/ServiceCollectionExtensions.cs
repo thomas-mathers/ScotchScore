@@ -15,10 +15,10 @@ public static class ServiceCollectionExtensions
     {
         serviceCollection.AddScoped<IRequestHandler<CreateReviewCommand, Result<Review>>, CreateReviewCommandHandler>();
         serviceCollection
-            .AddScoped<IRequestHandler<GetReviewsQuery, Result<IReadOnlyList<Review>>>, GetReviewsQueryHandler>();
+            .AddScoped<IRequestHandler<GetReviewsQuery, Result<Page<Review>>>, GetReviewsQueryHandler>();
         serviceCollection.AddScoped<IRequestHandler<GetScotchQuery, Result<Scotch>>, GetScotchQueryHandler>();
         serviceCollection
-            .AddScoped<IRequestHandler<GetScotchesQuery, Result<IReadOnlyList<Scotch>>>, GetScotchesQueryHandler>();
+            .AddScoped<IRequestHandler<GetScotchesQuery, Result<Page<Scotch>>>, GetScotchesQueryHandler>();
         serviceCollection
             .AddScoped<IRequestHandler<CreateReviewVoteCommand, Result<ReviewVote>>, CreateReviewVoteCommandHandler>();
         serviceCollection

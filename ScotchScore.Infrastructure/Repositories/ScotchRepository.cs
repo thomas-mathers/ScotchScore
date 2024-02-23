@@ -20,7 +20,7 @@ public class ScotchRepository(DatabaseContext databaseContext) : IScotchReposito
             [ScotchSortColumn.DateCreated] = scotch => scotch.DateCreated
         };
 
-    public async Task<IReadOnlyList<Scotch>> GetScotches
+    public async Task<Page<Scotch>> GetScotches
     (
         ScotchSearchParameters searchParameters,
         CancellationToken cancellationToken = default
@@ -45,13 +45,15 @@ public class ScotchRepository(DatabaseContext databaseContext) : IScotchReposito
         {
             query = query.Where(x => x.Name.Contains(searchParameters.Name, StringComparison.OrdinalIgnoreCase));
         }
+        
+        var totalScotches = await query.CountAsync(cancellationToken);
 
         var scotches = await query
             .Skip(searchParameters.PageIndex * searchParameters.PageSize)
             .Take(searchParameters.PageSize)
             .ToArrayAsync(cancellationToken);
 
-        return scotches;
+        return new Page<Scotch>(searchParameters.PageIndex, searchParameters.PageSize, totalScotches, scotches);
     }
 
     public Task<Scotch?> GetScotch(string scotchId, CancellationToken cancellationToken = default)

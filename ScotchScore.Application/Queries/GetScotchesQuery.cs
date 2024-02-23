@@ -1,6 +1,7 @@
 ﻿using Ardalis.Result;
 using ScotchScore.Application.Common;
 using ScotchScore.Application.Contracts;
+using ScotchScore.Application.Extensions;
 using ScotchScore.Application.Mappers;
 using ScotchScore.Contracts;
 using Scotch = ScotchScore.Contracts.Scotch;
@@ -13,17 +14,17 @@ public class GetScotchesQuery
 }
 
 public class GetScotchesQueryHandler(IScotchRepository scotchRepository)
-    : IRequestHandler<GetScotchesQuery, Result<IReadOnlyList<Scotch>>>
+    : IRequestHandler<GetScotchesQuery, Result<Page<Scotch>>>
 {
-    public async Task<Result<IReadOnlyList<Scotch>>> Handle(GetScotchesQuery request,
+    public async Task<Result<Page<Scotch>>> Handle(GetScotchesQuery request,
         CancellationToken cancellationToken)
     {
-        var scotches = await scotchRepository.GetScotches
+        var pageOfScotches = await scotchRepository.GetScotches
         (
             request.SearchParameters,
             cancellationToken
         );
 
-        return scotches.Select(ScotchMapper.Map).ToArray();
+        return pageOfScotches.Map(ScotchMapper.Map);
     }
 }

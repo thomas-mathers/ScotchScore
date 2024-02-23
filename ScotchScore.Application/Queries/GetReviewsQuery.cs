@@ -1,6 +1,7 @@
 ﻿using Ardalis.Result;
 using ScotchScore.Application.Common;
 using ScotchScore.Application.Contracts;
+using ScotchScore.Application.Extensions;
 using ScotchScore.Application.Mappers;
 using ScotchScore.Contracts;
 
@@ -14,9 +15,9 @@ public class GetReviewsQuery
 }
 
 public class GetReviewsQueryHandler(IReviewRepository reviewRepository, IReviewVoteRepository reviewVoteRepository)
-    : IRequestHandler<GetReviewsQuery, Result<IReadOnlyList<Review>>>
+    : IRequestHandler<GetReviewsQuery, Result<Page<Review>>>
 {
-    public async Task<Result<IReadOnlyList<Review>>> Handle(GetReviewsQuery request,
+    public async Task<Result<Page<Review>>> Handle(GetReviewsQuery request,
         CancellationToken cancellationToken)
     {
         var reviews = await reviewRepository.GetReviews
@@ -28,7 +29,7 @@ public class GetReviewsQueryHandler(IReviewRepository reviewRepository, IReviewV
 
         if (request.UserId is null)
         {
-            return reviews.Select(r => ReviewMapper.Map(r)).ToArray();
+            return reviews.Map(r => ReviewMapper.Map(r));
         }
 
         var reviewToVote = await reviewVoteRepository.GetUserVotes
@@ -38,7 +39,7 @@ public class GetReviewsQueryHandler(IReviewRepository reviewRepository, IReviewV
             cancellationToken
         );
 
-        var reviewDtos = reviews.Select(r => ReviewMapper.Map(r, reviewToVote.GetValueOrDefault(r.Id))).ToArray();
+        var reviewDtos = reviews.Map(r => ReviewMapper.Map(r, reviewToVote.GetValueOrDefault(r.Id)));
 
         return reviewDtos;
     }

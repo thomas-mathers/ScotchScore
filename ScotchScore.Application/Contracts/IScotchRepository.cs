@@ -5,7 +5,7 @@ namespace ScotchScore.Application.Contracts;
 
 public interface IScotchRepository
 {
-    Task<IReadOnlyList<Scotch>> GetScotches
+    Task<Page<Scotch>> GetScotches
     (
         ScotchSearchParameters searchParameters,
         CancellationToken cancellationToken = default

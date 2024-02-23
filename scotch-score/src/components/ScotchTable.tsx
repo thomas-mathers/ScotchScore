@@ -137,13 +137,11 @@ function ScotchTable() {
     );
   const [columnsVisible, setColumnVisible] = useState(ALL_COLUMNS);
 
-  const scotches = useQuery({
+  const { data: scotches, isLoading } = useQuery({
     queryKey: ['scotches', scotchSearchParameters],
     queryFn: () => getScotches(scotchSearchParameters),
     placeholderData: keepPreviousData,
   });
-
-  const rows = scotches.data ?? [];
 
   const onSortModelChange = (model: GridSortModel) => {
     if (model.length === 0) {
@@ -197,11 +195,11 @@ function ScotchTable() {
       <Paper>
         <DataGrid
           autoHeight
-          loading={scotches.isLoading}
+          loading={isLoading}
           columns={columns}
           columnVisibilityModel={columnsVisible}
-          rows={rows}
-          rowCount={rows.length}
+          rows={scotches?.records ?? []}
+          rowCount={scotches?.totalRecords ?? 0}
           getRowClassName={(params) =>
             params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
           }

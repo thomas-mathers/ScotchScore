@@ -16,14 +16,14 @@ namespace ScotchScore.Api.Controllers;
 [Produces("application/json")]
 public class ScotchesController(
     IRequestHandler<GetScotchQuery, Result<Scotch>> getScotchQueryHandler,
-    IRequestHandler<GetScotchesQuery, Result<IReadOnlyList<Scotch>>> getScotchesQueryHandler,
+    IRequestHandler<GetScotchesQuery, Result<Page<Scotch>>> getScotchesQueryHandler,
     IRequestHandler<CreateReviewCommand, Result<Review>> createReviewCommandHandler,
-    IRequestHandler<GetReviewsQuery, Result<IReadOnlyList<Review>>> getReviewsQueryHandler)
+    IRequestHandler<GetReviewsQuery, Result<Page<Review>>> getReviewsQueryHandler)
     : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType(200)]
-    public async Task<ActionResult<IReadOnlyList<Scotch>>> GetScotches(
+    public async Task<ActionResult<Page<Scotch>>> GetScotches(
         [FromQuery] ScotchSearchParameters searchParameters, CancellationToken cancellationToken)
     {
         var result = await getScotchesQueryHandler.Handle
@@ -92,7 +92,7 @@ public class ScotchesController(
     [ClaimsFilter]
     [HttpGet("{scotchId}/reviews")]
     [ProducesResponseType(200)]
-    public async Task<ActionResult<IReadOnlyList<Review>>> GetReviews(string? userId, [FromRoute] string scotchId,
+    public async Task<ActionResult<Page<Review>>> GetReviews(string? userId, [FromRoute] string scotchId,
         [FromQuery] ReviewSearchParameters searchParameters, CancellationToken cancellationToken)
     {
         var result = await getReviewsQueryHandler.Handle

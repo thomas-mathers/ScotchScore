@@ -21,10 +21,16 @@ function SearchBar() {
 
   useDebounce(() => setDebouncedName(name), 1000, [name]);
 
-  const scotches = useQuery({
+  const { data: scotches, isLoading } = useQuery({
     queryKey: ['scotches', debouncedName],
     queryFn: () => getScotches({ name: debouncedName, pageSize: 10 }),
-    placeholderData: [],
+    placeholderData: {
+      pageIndex: 0,
+      pageSize: 10,
+      totalPages: 0,
+      totalRecords: 0,
+      records: [],
+    },
   });
 
   return (
@@ -39,8 +45,8 @@ function SearchBar() {
       }
       filterOptions={(x) => x}
       groupBy={(scotch) => scotch.region}
-      options={scotches.data ?? []}
-      loading={scotches.isLoading}
+      options={scotches?.records ?? []}
+      loading={isLoading}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -73,7 +79,7 @@ function SearchBar() {
             ),
             endAdornment: (
               <>
-                {scotches.isLoading ? (
+                {isLoading ? (
                   <CircularProgress color="inherit" size={20} />
                 ) : null}
                 {params.InputProps.endAdornment}

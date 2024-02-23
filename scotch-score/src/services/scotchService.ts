@@ -1,10 +1,11 @@
+import Page from '../types/page';
 import Scotch from '../types/scotch';
 import ScotchSearchParameters from '../types/scotchSearchParameters';
 import { getJson } from './apiService';
 
 async function getScotches(
   searchParameters: ScotchSearchParameters,
-): Promise<Scotch[]> {
+): Promise<Page<Scotch>> {
   return getJson(`scotches`, searchParameters);
 }
 

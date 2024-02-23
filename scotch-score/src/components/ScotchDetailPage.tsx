@@ -21,14 +21,13 @@ import ImageGallery, { ReactImageGalleryItem } from 'react-image-gallery';
 import { useParams } from 'react-router-dom';
 
 import useAccessToken from '../hooks/useAccessToken';
-import { getReviews, getUserReview } from '../services/reviewService';
+import { getUserReview } from '../services/reviewService';
 import { getScotch } from '../services/scotchService';
-import ReviewSearchParameters from '../types/reviewSearchParameters';
 import formatCurrency from '../utils/formatCurrency';
 import NewReviewDialog from './NewReviewDialog';
 import RatingHistogram from './RatingHistogram';
 import RatingSummary from './RatingSummary';
-import ReviewListItem from './ReviewListItem';
+import ScotchReviews from './ScotchReviews';
 
 function ScotchDetailPage() {
   const routeParams = useParams();
@@ -38,20 +37,9 @@ function ScotchDetailPage() {
 
   const { loading: isFetchingAccessToken, accessToken } = useAccessToken();
 
-  const [reviewSearchParameters] = useState<ReviewSearchParameters>({
-    pageIndex: 0,
-    pageSize: 20,
-  });
-
   const { data: scotch } = useQuery({
     queryKey: ['scotches', scotchId],
     queryFn: () => getScotch(scotchId),
-  });
-
-  const { data: reviews } = useQuery({
-    queryKey: ['reviews', scotchId, reviewSearchParameters, accessToken],
-    queryFn: () => getReviews(scotchId, reviewSearchParameters, accessToken),
-    enabled: !isFetchingAccessToken,
   });
 
   const { data: userReview } = useQuery({
@@ -148,9 +136,7 @@ function ScotchDetailPage() {
             </Select>
           </FormControl>
           <Divider sx={{ marginBottom: 2, marginTop: 2 }} />
-          {reviews?.map((review) => (
-            <ReviewListItem key={review.id} review={review} />
-          ))}
+          <ScotchReviews scotchId={scotchId} />
         </Box>
       </Paper>
       <NewReviewDialog
