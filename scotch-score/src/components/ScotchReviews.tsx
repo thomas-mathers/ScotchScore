@@ -49,9 +49,9 @@ function ScotchReviews({ scotchId }: ScotchReviewsProps) {
       hasMore={hasMoreReviews}
       loader={<Typography>Loading...</Typography>}
     >
-      {reviewPages?.pages
-        .flatMap((review) => review.records)
-        .map((review) => <ReviewListItem key={review.id} review={review} />)}
+      {reviews?.map((review) => (
+        <ReviewListItem key={review.id} review={review} />
+      ))}
     </InfiniteScroll>
   );
 }
