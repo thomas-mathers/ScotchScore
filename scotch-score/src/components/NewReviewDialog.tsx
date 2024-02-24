@@ -128,3 +128,4 @@ function NewReviewDialog({
 }
 
 export default NewReviewDialog;
+export type { NewReviewDialogProps };

@@ -1,4 +1,3 @@
-import { useAuth0 } from '@auth0/auth0-react';
 import { Logout } from '@mui/icons-material';
 import {
   Avatar,
@@ -11,9 +10,12 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 
-function UserMenu() {
-  const { user, logout } = useAuth0();
+interface UserMenuProps {
+  userName?: string;
+  onClickLogout?: () => void;
+}
 
+function UserMenu({ userName, onClickLogout }: UserMenuProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -26,7 +28,7 @@ function UserMenu() {
   };
 
   const handleLogout = () => {
-    logout();
+    onClickLogout?.();
     handleClose();
   };
 
@@ -80,7 +82,7 @@ function UserMenu() {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <MenuItem>
-          <Avatar /> {user!.name}
+          <Avatar /> {userName}
         </MenuItem>
         <Divider />
         <MenuItem onClick={handleLogout}>
@@ -95,3 +97,4 @@ function UserMenu() {
 }
 
 export default UserMenu;
+export type { UserMenuProps };

@@ -28,3 +28,4 @@ function RatingSummary(props: RatingSummaryProps) {
 }
 
 export default RatingSummary;
+export type { RatingSummaryProps };

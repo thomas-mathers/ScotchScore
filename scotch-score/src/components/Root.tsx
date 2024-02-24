@@ -8,7 +8,7 @@ import SearchBar from './SearchBar';
 import UserMenu from './UserMenu';
 
 function Root() {
-  const { isAuthenticated } = useAuth0();
+  const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
   return (
     <Container maxWidth="lg">
       <AppBar>
@@ -23,7 +23,11 @@ function Root() {
           </Grid>
           <Grid item xs="auto" sm={3} lg={4}>
             <Box display="flex" justifyContent="flex-end">
-              {isAuthenticated ? <UserMenu /> : <LoginButton />}
+              {isAuthenticated ? (
+                <UserMenu userName={user?.name} onClickLogout={logout} />
+              ) : (
+                <LoginButton onClick={loginWithRedirect} />
+              )}
             </Box>
           </Grid>
         </Grid>

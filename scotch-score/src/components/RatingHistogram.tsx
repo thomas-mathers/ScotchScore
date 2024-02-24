@@ -28,3 +28,4 @@ function RatingHistogram({ ratings }: RatingHistogramProps) {
 }
 
 export default RatingHistogram;
+export type { RatingHistogramProps };

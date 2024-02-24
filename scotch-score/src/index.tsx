@@ -41,23 +41,25 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
 
+const auth0Domain = process.env.REACT_APP_AUTH0_DOMAIN!;
+const auth0ClientId = process.env.REACT_APP_AUTH0_CLIENT_ID!;
+const auth0AuthorizationParams = {
+  audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+};
+
 root.render(
   <StrictMode>
-    <>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <QueryClientProvider client={queryClient}>
-          <Auth0Provider
-            domain={process.env.REACT_APP_AUTH0_DOMAIN!}
-            clientId={process.env.REACT_APP_AUTH0_CLIENT_ID!}
-            authorizationParams={{
-              audience: process.env.REACT_APP_AUTH0_AUDIENCE,
-            }}
-          >
-            <RouterProvider router={router} />
-          </Auth0Provider>
-        </QueryClientProvider>
-      </ThemeProvider>
-    </>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <QueryClientProvider client={queryClient}>
+        <Auth0Provider
+          domain={auth0Domain}
+          clientId={auth0ClientId}
+          authorizationParams={auth0AuthorizationParams}
+        >
+          <RouterProvider router={router} />
+        </Auth0Provider>
+      </QueryClientProvider>
+    </ThemeProvider>
   </StrictMode>,
 );
