@@ -1,6 +1,5 @@
-import { SortDirection } from '@mui/material';
-
 import ReviewSortColumn from './reviewSortColumn';
+import SortDirection from './sortDirection';
 
 interface ReviewSearchParameters {
   pageIndex?: number;

@@ -5,25 +5,22 @@ import { useAuth0 } from '@auth0/auth0-react';
 import {
   Box,
   Divider,
-  FormControl,
   Grid,
-  InputLabel,
-  MenuItem,
   Paper,
   Rating,
-  Select,
   Tooltip,
   Typography,
 } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import ImageGallery, { ReactImageGalleryItem } from 'react-image-gallery';
+import ImageGallery from 'react-image-gallery';
 import { useParams } from 'react-router-dom';
 
 import useAccessToken from '../hooks/useAccessToken';
 import { getUserReview } from '../services/reviewService';
 import { getScotch } from '../services/scotchService';
 import formatCurrency from '../utils/formatCurrency';
+import mapImageToGalleryItem from '../utils/mapImageToGalleryItem';
 import NewReviewDialog from './NewReviewDialog';
 import RatingHistogram from './RatingHistogram';
 import RatingSummary from './RatingSummary';
@@ -51,11 +48,7 @@ function ScotchDetailPage() {
   const [rating, setRating] = useState<number | null>(null);
   const [newReviewDialogOpen, setNewReviewDialogOpen] = useState(false);
 
-  const items: ReactImageGalleryItem[] =
-    scotch?.images.map((src) => ({
-      original: src,
-      thumbnail: src,
-    })) ?? [];
+  const items = scotch?.images.map(mapImageToGalleryItem) ?? [];
 
   useEffect(() => {
     if (userReview) {
@@ -126,16 +119,6 @@ function ScotchDetailPage() {
           <Typography variant="h5" component="h2" sx={{ marginBottom: 3 }}>
             <strong>Reviews</strong>
           </Typography>
-          <FormControl variant="outlined">
-            <InputLabel id="sort-label">Sort by</InputLabel>
-            <Select labelId="sort-label" label="Sort by" value={10}>
-              <MenuItem value={10}>Most recent</MenuItem>
-              <MenuItem value={20}>Most helpful</MenuItem>
-              <MenuItem value={30}>Highest to lowest rating</MenuItem>
-              <MenuItem value={40}>Lowest to highest rating</MenuItem>
-            </Select>
-          </FormControl>
-          <Divider sx={{ marginBottom: 2, marginTop: 2 }} />
           <ScotchReviews scotchId={scotchId} />
         </Box>
       </Paper>
