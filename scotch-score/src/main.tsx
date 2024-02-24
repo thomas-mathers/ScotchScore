@@ -11,8 +11,7 @@ import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import ErrorPage from './components/ErrorPage';
-import Root from './components/Root';
+import App from './App';
 import ScotchDetailPage from './components/ScotchDetailPage';
 import ScotchTable from './components/ScotchTable';
 import theme from './theme';
@@ -20,8 +19,7 @@ import theme from './theme';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Root />,
-    errorElement: <ErrorPage />,
+    element: <App />,
     children: [
       {
         path: '/',
@@ -41,10 +39,10 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
 
-const auth0Domain = process.env.REACT_APP_AUTH0_DOMAIN!;
-const auth0ClientId = process.env.REACT_APP_AUTH0_CLIENT_ID!;
+const auth0Domain = import.meta.env.VITE_AUTH0_DOMAIN!;
+const auth0ClientId = import.meta.env.VITE_AUTH0_CLIENT_ID!;
 const auth0AuthorizationParams = {
-  audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+  audience: import.meta.env.VITE_AUTH0_AUDIENCE,
 };
 
 root.render(

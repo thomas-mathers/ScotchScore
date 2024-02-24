@@ -1,6 +1,4 @@
-function convertToStringToStringRecord(
-  object: Record<string, any>,
-): Record<string, string> {
+function convertToStringToStringRecord(object: object): Record<string, string> {
   const record: Record<string, string> = {};
   for (const [key, value] of Object.entries(object)) {
     if (value) {

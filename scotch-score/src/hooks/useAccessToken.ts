@@ -11,10 +11,13 @@ function useAccessToken() {
       try {
         const token = await getAccessTokenSilently();
         setAccessToken(token);
-      } catch (error: any) {
-        if (error.error !== 'login_required') {
-          console.error('Error getting access token', error);
+      } catch (error) {
+        if (error instanceof Object && 'error' in error) {
+          if (error.error === 'login_required') {
+            return;
+          }
         }
+        throw error;
       } finally {
         setLoading(false);
       }

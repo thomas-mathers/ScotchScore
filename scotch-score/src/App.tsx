@@ -2,12 +2,12 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { AppBar, Box, Container, Grid, Hidden } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 
-import LoginButton from './LoginButton';
-import LogoButton from './LogoButton';
-import SearchBar from './SearchBar';
-import UserMenu from './UserMenu';
+import LoginButton from './components/LoginButton';
+import LogoButton from './components/LogoButton';
+import SearchBar from './components/SearchBar';
+import UserMenu from './components/UserMenu';
 
-function Root() {
+function App() {
   const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
   return (
     <Container maxWidth="lg">
@@ -42,4 +42,4 @@ function Root() {
   );
 }
 
-export default Root;
+export default App;

@@ -1,9 +1,11 @@
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 async function getJson<T>(
   endpoint: string,
-  queryParameters: { [key: string]: any } = {},
-  headers: { [key: string]: any } = {},
+  queryParameters: object = {},
+  headers: { [key: string]: string } = {},
 ): Promise<T> {
-  var url = new URL(`${process.env.REACT_APP_API_BASE_URL}/${endpoint}`);
+  const url = new URL(`${API_BASE_URL}/${endpoint}`);
 
   for (const [key, value] of Object.entries(queryParameters)) {
     if (value) {
@@ -30,11 +32,11 @@ async function getJson<T>(
 
 async function postJson<T>(
   endpoint: string,
-  body: any,
-  queryParameters: { [key: string]: any } = {},
-  headers: { [key: string]: any } = {},
+  body: unknown,
+  queryParameters: object = {},
+  headers: { [key: string]: string } = {},
 ): Promise<T> {
-  var url = new URL(`${process.env.REACT_APP_API_BASE_URL}/${endpoint}`);
+  const url = new URL(`${API_BASE_URL}/${endpoint}`);
 
   for (const [key, value] of Object.entries(queryParameters)) {
     if (value) {
@@ -63,11 +65,11 @@ async function postJson<T>(
 
 async function putJson<T>(
   endpoint: string,
-  body: any,
-  queryParameters: { [key: string]: any } = {},
-  headers: { [key: string]: any } = {},
+  body: unknown,
+  queryParameters: object = {},
+  headers: { [key: string]: string } = {},
 ): Promise<T> {
-  var url = new URL(`${process.env.REACT_APP_API_BASE_URL}/${endpoint}`);
+  const url = new URL(`${API_BASE_URL}/${endpoint}`);
 
   for (const [key, value] of Object.entries(queryParameters)) {
     if (value) {
@@ -96,10 +98,10 @@ async function putJson<T>(
 
 async function deleteJson<T>(
   endpoint: string,
-  queryParameters: { [key: string]: any } = {},
-  headers: { [key: string]: any } = {},
+  queryParameters: object = {},
+  headers: { [key: string]: string } = {},
 ): Promise<T> {
-  var url = new URL(`${process.env.REACT_APP_API_BASE_URL}/${endpoint}`);
+  const url = new URL(`${API_BASE_URL}/${endpoint}`);
 
   for (const [key, value] of Object.entries(queryParameters)) {
     if (value) {
