@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
 
 import LoginButton, { LoginButtonProps } from './LoginButton';
 
@@ -19,7 +20,7 @@ describe('LoginButton', () => {
   });
 
   it('calls onClick when clicked', async () => {
-    const onClick = jest.fn();
+    const onClick = vi.fn();
     const { user } = renderComponent({ onClick });
 
     await user.click(screen.getByText('Login'));

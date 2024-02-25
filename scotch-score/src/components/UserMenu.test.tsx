@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
 
 import UserMenu, { UserMenuProps } from './UserMenu';
 
@@ -28,7 +29,7 @@ describe('UserMenu', () => {
   });
 
   it('calls onLogout when the logout button is clicked', async () => {
-    const onClickLogout = jest.fn();
+    const onClickLogout = vi.fn();
 
     const { user } = renderComponent({ onClickLogout });
 

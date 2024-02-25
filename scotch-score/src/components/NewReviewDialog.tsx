@@ -117,7 +117,9 @@ function NewReviewDialog({
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose}>Cancel</Button>
+          <Button onClick={onClose} name="close">
+            Cancel
+          </Button>
           <Button variant="contained" color="primary" type="submit">
             Submit
           </Button>
