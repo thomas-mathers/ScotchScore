@@ -23,7 +23,7 @@ steps:
       workingDir: '$(Build.SourcesDirectory)/scotch-score'
 
   - task: Npm@1
-    displayName: 'npm run test:ci'
+    displayName: 'npm run test'
     inputs:
       command: 'custom'
       workingDir: '$(Build.SourcesDirectory)/scotch-score'
