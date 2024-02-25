@@ -2,7 +2,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { useEffect, useState } from 'react';
 
 function useAccessToken() {
-  const { getAccessTokenSilently } = useAuth0();
+  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
   const [accessToken, setAccessToken] = useState<string>('');
   const [loading, setLoading] = useState(true);
 
@@ -24,7 +24,7 @@ function useAccessToken() {
     }
 
     getAccessToken();
-  }, [getAccessTokenSilently]);
+  }, [getAccessTokenSilently, isAuthenticated]);
 
   return { loading, accessToken };
 }

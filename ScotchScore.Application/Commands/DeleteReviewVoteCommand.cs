@@ -7,7 +7,7 @@ namespace ScotchScore.Application.Commands;
 public class DeleteReviewVoteCommand
 {
     public string UserId { get; init; } = string.Empty;
-    public string ReviewVoteId { get; init; } = string.Empty;
+    public string VoteId { get; init; } = string.Empty;
 }
 
 public class DeleteReviewVoteCommandHandler(
@@ -18,7 +18,7 @@ public class DeleteReviewVoteCommandHandler(
 {
     public async Task<Result<bool>> Handle(DeleteReviewVoteCommand request, CancellationToken cancellationToken)
     {
-        var vote = await reviewVoteRepository.GetVote(request.ReviewVoteId, cancellationToken);
+        var vote = await reviewVoteRepository.GetVote(request.VoteId, cancellationToken);
 
         if (vote is null)
         {

@@ -32,7 +32,7 @@ function ScotchDetailPage() {
 
   const { isAuthenticated, user } = useAuth0();
 
-  const { loading: isFetchingAccessToken, accessToken } = useAccessToken();
+  const { accessToken } = useAccessToken();
 
   const { data: scotch } = useQuery({
     queryKey: ['scotches', scotchId],
@@ -40,9 +40,9 @@ function ScotchDetailPage() {
   });
 
   const { data: userReview } = useQuery({
-    queryKey: ['userReview', scotchId, user?.sub, accessToken],
-    queryFn: () => getUserReview(scotchId, user!.sub!, accessToken),
-    enabled: !isFetchingAccessToken && isAuthenticated,
+    queryKey: ['userReview', scotchId, user, accessToken],
+    queryFn: () => getUserReview({ scotchId, userId: user!.sub!, accessToken }),
+    enabled: isAuthenticated,
   });
 
   const [rating, setRating] = useState<number | null>(null);

@@ -37,7 +37,7 @@ public class ReviewsController(
             {
                 UserId = userId,
                 ReviewId = reviewId,
-                ReviewVoteType = request.ReviewVoteType
+                VoteType = request.VoteType
             },
             cancellationToken
         );
@@ -61,8 +61,8 @@ public class ReviewsController(
             new UpdateReviewVoteCommand
             {
                 UserId = userId,
-                ReviewVoteId = reviewVoteId,
-                ReviewVoteType = request.ReviewVoteType
+                VoteId = reviewVoteId,
+                VoteType = request.VoteType
             },
             cancellationToken
         );
@@ -73,11 +73,11 @@ public class ReviewsController(
 
     [Authorize]
     [ClaimsFilter]
-    [HttpDelete("{reviewId}/votes/{reviewVoteId}")]
+    [HttpDelete("{reviewId}/votes/{voteId}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(403)]
     [ProducesResponseType(404)]
-    public async Task<ActionResult<bool>> DeleteVote(string? userId, string reviewId, string reviewVoteId,
+    public async Task<ActionResult<bool>> DeleteVote(string? userId, string reviewId, string voteId,
         CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(userId);
@@ -87,7 +87,7 @@ public class ReviewsController(
             new DeleteReviewVoteCommand
             {
                 UserId = userId,
-                ReviewVoteId = reviewVoteId
+                VoteId = voteId
             },
             cancellationToken
         );

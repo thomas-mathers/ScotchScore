@@ -1,34 +1,22 @@
-import { Auth0Provider } from '@auth0/auth0-react';
 import { faker } from '@faker-js/faker';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 
+import MockAuth0Provider from '../tests/MockAuth0Provider';
+import MockQueryClientProvider from '../tests/MockQueryClientProvider';
 import NewReviewDialog, { NewReviewDialogProps } from './NewReviewDialog';
-
-const queryClient = new QueryClient();
-
-const auth0Domain = import.meta.env.VITE_AUTH0_DOMAIN!;
-const auth0ClientId = import.meta.env.VITE_AUTH0_CLIENT_ID!;
-const auth0AuthorizationParams = {
-  audience: import.meta.env.VITE_AUTH0_AUDIENCE,
-};
 
 function renderComponent(props: NewReviewDialogProps) {
   const user = userEvent.setup();
   return {
     user,
     ...render(
-      <QueryClientProvider client={queryClient}>
-        <Auth0Provider
-          domain={auth0Domain}
-          clientId={auth0ClientId}
-          authorizationParams={auth0AuthorizationParams}
-        >
+      <MockQueryClientProvider>
+        <MockAuth0Provider>
           <NewReviewDialog {...props} />
-        </Auth0Provider>
-      </QueryClientProvider>,
+        </MockAuth0Provider>
+      </MockQueryClientProvider>,
     ),
   };
 }

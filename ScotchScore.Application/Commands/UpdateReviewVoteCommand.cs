@@ -9,8 +9,8 @@ namespace ScotchScore.Application.Commands;
 public class UpdateReviewVoteCommand
 {
     public string UserId { get; init; } = string.Empty;
-    public string ReviewVoteId { get; init; } = string.Empty;
-    public ReviewVoteType ReviewVoteType { get; init; }
+    public string VoteId { get; init; } = string.Empty;
+    public ReviewVoteType VoteType { get; init; }
 }
 
 public class UpdateReviewVoteCommandHandler(
@@ -21,7 +21,7 @@ public class UpdateReviewVoteCommandHandler(
 {
     public async Task<Result<ReviewVote>> Handle(UpdateReviewVoteCommand request, CancellationToken cancellationToken)
     {
-        var vote = await reviewVoteRepository.GetVote(request.ReviewVoteId, cancellationToken);
+        var vote = await reviewVoteRepository.GetVote(request.VoteId, cancellationToken);
 
         if (vote is null)
         {
@@ -40,7 +40,7 @@ public class UpdateReviewVoteCommandHandler(
             return Result<ReviewVote>.NotFound();
         }
         
-        var reviewVoteType = request.ReviewVoteType == ReviewVoteType.Upvote
+        var reviewVoteType = request.VoteType == ReviewVoteType.Upvote
             ? Domain.ReviewVoteType.Upvote
             : Domain.ReviewVoteType.Downvote;
         

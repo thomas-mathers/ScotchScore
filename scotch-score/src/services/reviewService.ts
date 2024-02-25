@@ -1,27 +1,28 @@
 import CreateReviewRequest from '../types/createReviewRequest';
-import CreateReviewVoteRequest from '../types/createReviewVoteRequest';
+import CreateVoteRequest from '../types/createVoteRequest';
+import DeleteVoteRequest from '../types/deleteVoteRequest';
+import GetReviewsRequest from '../types/getReviewsRequest';
+import GetUserReviewRequest from '../types/getUserReviewRequest';
 import Page from '../types/page';
 import Review from '../types/review';
-import ReviewSearchParameters from '../types/reviewSearchParameters';
-import UpdateReviewVoteRequest from '../types/updateReviewVoteRequest';
+import UpdateVoteRequest from '../types/updateVoteRequest';
 import { deleteJson, getJson, postJson, putJson } from './apiService';
 
-async function getReviews(
-  scotchId: string,
-  searchParameters: ReviewSearchParameters,
-  accessToken?: string,
-): Promise<Page<Review>> {
-  return getJson(`scotches/${scotchId}/reviews`, searchParameters, {
-    Authorization: `Bearer ${accessToken}`,
-  });
+async function getReviews(request: GetReviewsRequest): Promise<Page<Review>> {
+  return getJson(
+    `scotches/${request.scotchId}/reviews`,
+    request.searchParameters,
+    {
+      Authorization: `Bearer ${request.accessToken}`,
+    },
+  );
 }
 
 async function getUserReview(
-  scotchId: string,
-  userId: string,
-  accessToken: string,
+  request: GetUserReviewRequest,
 ): Promise<Review | undefined> {
-  const reviews = await getJson<Review[]>(
+  const { userId, accessToken, scotchId } = request;
+  const reviews = await getJson<Page<Review>>(
     `scotches/${scotchId}/reviews`,
     {
       userId,
@@ -30,17 +31,14 @@ async function getUserReview(
       Authorization: `Bearer ${accessToken}`,
     },
   );
-  return reviews.length > 0 ? reviews[0] : undefined;
+  return reviews.records.length > 0 ? reviews.records[0] : undefined;
 }
 
-async function postReview(
-  scotchId: string,
-  createReviewRequest: CreateReviewRequest,
-  accessToken: string,
-): Promise<Review> {
+async function postReview(request: CreateReviewRequest): Promise<Review> {
+  const { accessToken, scotchId, ...body } = request;
   return postJson(
     `scotches/${scotchId}/reviews`,
-    createReviewRequest,
+    body,
     {},
     {
       Authorization: `Bearer ${accessToken}`,
@@ -48,40 +46,30 @@ async function postReview(
   );
 }
 
-async function createVote(
-  reviewId: string,
-  createReviewVoteRequest: CreateReviewVoteRequest,
-  accessToken: string,
-): Promise<Review> {
+async function createVote(request: CreateVoteRequest): Promise<Review> {
+  const { reviewId, voteType, accessToken } = request;
   return postJson(
     `reviews/${reviewId}/votes`,
-    createReviewVoteRequest,
+    { voteType },
     {},
     { Authorization: `Bearer ${accessToken}` },
   );
 }
 
-async function updateVote(
-  reviewId: string,
-  reviewVoteId: string,
-  updateReviewVoteRequest: UpdateReviewVoteRequest,
-  accessToken: string,
-): Promise<Review> {
+async function updateVote(request: UpdateVoteRequest): Promise<Review> {
+  const { reviewId, voteId, accessToken } = request;
   return putJson(
-    `reviews/${reviewId}/votes/${reviewVoteId}`,
-    updateReviewVoteRequest,
+    `reviews/${reviewId}/votes/${voteId}`,
+    { voteType: request.voteType },
     {},
     { Authorization: `Bearer ${accessToken}` },
   );
 }
 
-async function deleteVote(
-  reviewId: string,
-  reviewVoteId: string,
-  accessToken: string,
-): Promise<boolean> {
+async function deleteVote(request: DeleteVoteRequest): Promise<boolean> {
+  const { reviewId, voteId, accessToken } = request;
   return deleteJson(
-    `reviews/${reviewId}/votes/${reviewVoteId}`,
+    `reviews/${reviewId}/votes/${voteId}`,
     {},
     { Authorization: `Bearer ${accessToken}` },
   );

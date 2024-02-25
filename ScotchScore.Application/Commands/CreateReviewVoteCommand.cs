@@ -10,7 +10,7 @@ public class CreateReviewVoteCommand
 {
     public string ReviewId { get; init; } = string.Empty;
     public string UserId { get; init; } = string.Empty;
-    public ReviewVoteType ReviewVoteType { get; init; }
+    public ReviewVoteType VoteType { get; init; }
 }
 
 public class CreateReviewVoteCommandHandler(
@@ -35,7 +35,7 @@ public class CreateReviewVoteCommandHandler(
             return Result<ReviewVote>.Conflict();
         }
         
-        if (request.ReviewVoteType == ReviewVoteType.Upvote)
+        if (request.VoteType == ReviewVoteType.Upvote)
         {
             review.Upvotes++;
         }
@@ -49,7 +49,7 @@ public class CreateReviewVoteCommandHandler(
             ScotchId = review.ScotchId,
             ReviewId = review.Id,
             UserId = request.UserId,
-            ReviewVoteType = request.ReviewVoteType == ReviewVoteType.Upvote
+            ReviewVoteType = request.VoteType == ReviewVoteType.Upvote
                 ? Domain.ReviewVoteType.Upvote
                 : Domain.ReviewVoteType.Downvote
         };

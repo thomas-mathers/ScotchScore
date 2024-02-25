@@ -8,7 +8,7 @@ import SearchBar from './components/SearchBar';
 import UserMenu from './components/UserMenu';
 
 function App() {
-  const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
+  const { user, isAuthenticated, loginWithPopup, logout } = useAuth0();
   return (
     <Container maxWidth="lg">
       <AppBar>
@@ -26,7 +26,7 @@ function App() {
               {isAuthenticated ? (
                 <UserMenu userName={user?.name} onClickLogout={logout} />
               ) : (
-                <LoginButton onClick={loginWithRedirect} />
+                <LoginButton onClick={loginWithPopup} />
               )}
             </Box>
           </Grid>

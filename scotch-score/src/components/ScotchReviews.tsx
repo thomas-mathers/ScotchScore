@@ -9,15 +9,28 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query';
+import { useCallback, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import useAccessToken from '../hooks/useAccessToken';
-import { getReviews } from '../services/reviewService';
+import {
+  createVote,
+  deleteVote,
+  getReviews,
+  updateVote,
+} from '../services/reviewService';
+import CreateVoteRequest from '../types/createVoteRequest';
+import DeleteVoteRequest from '../types/deleteVoteRequest';
+import Review from '../types/review';
 import ReviewSearchParameters from '../types/reviewSearchParameters';
 import ReviewSortColumn from '../types/reviewSortColumn';
 import SortDirection from '../types/sortDirection';
+import UpdateVoteRequest from '../types/updateVoteRequest';
 import ReviewListItem from './ReviewListItem';
 
 interface ScotchReviewsProps {
@@ -52,7 +65,9 @@ const sortOptions: SortOption[] = [
 ];
 
 function ScotchReviews({ scotchId }: ScotchReviewsProps) {
-  const { loading: isFetchingAccessToken, accessToken } = useAccessToken();
+  const { accessToken } = useAccessToken();
+
+  const isAuthenticated = Boolean(accessToken);
 
   const [reviewSearchParameters, setReviewSearchParameters] =
     useState<ReviewSearchParameters>({
@@ -67,12 +82,11 @@ function ScotchReviews({ scotchId }: ScotchReviewsProps) {
   } = useInfiniteQuery({
     queryKey: ['reviews', scotchId, reviewSearchParameters, accessToken],
     queryFn: ({ pageParam: pageIndex }) =>
-      getReviews(
+      getReviews({
         scotchId,
-        { ...reviewSearchParameters, pageIndex },
+        searchParameters: { ...reviewSearchParameters, pageIndex },
         accessToken,
-      ),
-    enabled: !isFetchingAccessToken,
+      }),
     getNextPageParam: (lastPage) =>
       lastPage.pageIndex + 1 < lastPage.totalPages
         ? lastPage.pageIndex + 1
@@ -91,6 +105,107 @@ function ScotchReviews({ scotchId }: ScotchReviewsProps) {
       sortDirection: sortOption.sortDirection,
     });
   };
+
+  const queryClient = useQueryClient();
+
+  const createVoteMutation = useMutation<
+    Review,
+    Error,
+    CreateVoteRequest,
+    unknown
+  >({
+    mutationFn: createVote,
+    mutationKey: ['upvoteReview'],
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['reviews', scotchId] });
+    },
+  });
+
+  const updateVoteMutation = useMutation<
+    Review,
+    Error,
+    UpdateVoteRequest,
+    unknown
+  >({
+    mutationFn: updateVote,
+    mutationKey: ['updateVote'],
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['reviews', scotchId] });
+    },
+  });
+
+  const deleteVoteMutation = useMutation<
+    boolean,
+    Error,
+    DeleteVoteRequest,
+    unknown
+  >({
+    mutationFn: deleteVote,
+    mutationKey: ['deleteVote'],
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['reviews', scotchId] });
+    },
+  });
+
+  const handleClickUpvote = useCallback(
+    (review: Review) => {
+      if (review.userVote?.reviewVoteType === 'Upvote') {
+        deleteVoteMutation.mutate({
+          reviewId: review.id,
+          voteId: review.userVote.id,
+          accessToken,
+        });
+        return;
+      }
+
+      if (review.userVote?.reviewVoteType === 'Downvote') {
+        updateVoteMutation.mutate({
+          reviewId: review.id,
+          voteId: review.userVote.id,
+          voteType: 'Upvote',
+          accessToken,
+        });
+        return;
+      }
+
+      createVoteMutation.mutate({
+        reviewId: review.id,
+        voteType: 'Upvote',
+        accessToken,
+      });
+    },
+    [createVoteMutation, deleteVoteMutation, updateVoteMutation, accessToken],
+  );
+
+  const handleClickDownvote = useCallback(
+    (review: Review) => {
+      if (review.userVote?.reviewVoteType === 'Downvote') {
+        deleteVoteMutation.mutate({
+          reviewId: review.id,
+          voteId: review.userVote.id,
+          accessToken,
+        });
+        return;
+      }
+
+      if (review.userVote?.reviewVoteType === 'Upvote') {
+        updateVoteMutation.mutate({
+          reviewId: review.id,
+          voteId: review.userVote.id,
+          voteType: 'Downvote',
+          accessToken,
+        });
+        return;
+      }
+
+      createVoteMutation.mutate({
+        reviewId: review.id,
+        voteType: 'Downvote',
+        accessToken,
+      });
+    },
+    [createVoteMutation, deleteVoteMutation, updateVoteMutation, accessToken],
+  );
 
   return (
     <Box>
@@ -120,7 +235,21 @@ function ScotchReviews({ scotchId }: ScotchReviewsProps) {
         loader={<ScotchReviewsLoader />}
       >
         {reviews?.map((review) => (
-          <ReviewListItem key={review.id} review={review} />
+          <ReviewListItem
+            key={review.id}
+            title={review.title}
+            description={review.description}
+            rating={review.rating}
+            userName={review.userName}
+            userProfilePictureUrl={review.userProfilePictureUrl}
+            upvotes={review.upvotes}
+            downvotes={review.downvotes}
+            dateCreated={review.dateCreated}
+            userVote={review.userVote?.reviewVoteType}
+            isAuthenticated={isAuthenticated}
+            onClickUpvote={() => handleClickUpvote(review)}
+            onClickDownvote={() => handleClickDownvote(review)}
+          />
         ))}
       </InfiniteScroll>
     </Box>

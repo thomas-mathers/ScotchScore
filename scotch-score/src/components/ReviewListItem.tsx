@@ -1,4 +1,3 @@
-import { useAuth0 } from '@auth0/auth0-react';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
@@ -13,106 +12,48 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import TimeAgo from 'react-timeago';
 
-import useAccessToken from '../hooks/useAccessToken';
-import { createVote, deleteVote, updateVote } from '../services/reviewService';
-import Review from '../types/review';
 import ReviewVoteType from '../types/reviewVoteType';
 
 interface ReviewListItemProps {
-  review: Review;
+  title: string;
+  description: string;
+  rating: number;
+  userName: string;
+  userProfilePictureUrl: string;
+  upvotes: number;
+  downvotes: number;
+  dateCreated: Date;
+  userVote?: ReviewVoteType;
+  isAuthenticated: boolean;
+  onClickUpvote?: () => void;
+  onClickDownvote?: () => void;
 }
 
 function ReviewListItem(props: ReviewListItemProps) {
-  const { review } = props;
-
-  const { isAuthenticated } = useAuth0();
-
-  const { accessToken } = useAccessToken();
-
-  const queryClient = useQueryClient();
-
-  const createVoteMutation = useMutation<
-    Review,
-    Error,
-    ReviewVoteType,
-    unknown
-  >({
-    mutationFn: (reviewVoteType: ReviewVoteType) =>
-      createVote(review.id, { reviewVoteType }, accessToken),
-    mutationKey: ['upvoteReview', review.id, accessToken],
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['reviews', review.scotchId] });
-    },
-  });
-
-  const updateVoteMutation = useMutation<
-    Review,
-    Error,
-    ReviewVoteType,
-    unknown
-  >({
-    mutationFn: (reviewVoteType: ReviewVoteType) =>
-      updateVote(
-        review.id,
-        review.userVote!.id,
-        { reviewVoteType },
-        accessToken,
-      ),
-    mutationKey: ['updateVote', review.id, review.userVote?.id, accessToken],
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['reviews', review.scotchId] });
-    },
-  });
-
-  const deleteVoteMutation = useMutation<boolean>({
-    mutationFn: () => deleteVote(review.id, review.userVote!.id, accessToken),
-    mutationKey: ['deleteVote', review.id, review.userVote?.id, accessToken],
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['reviews', review.scotchId] });
-    },
-  });
-
-  const isUpvoted = review.userVote?.reviewVoteType === 'Upvote';
-  const isDownvoted = review.userVote?.reviewVoteType === 'Downvote';
-
-  const handleClickUpvote = () => {
-    if (isUpvoted) {
-      deleteVoteMutation.mutate();
-      return;
-    }
-
-    if (isDownvoted) {
-      updateVoteMutation.mutate('Upvote');
-      return;
-    }
-
-    createVoteMutation.mutate('Upvote');
-  };
-
-  const handleClickDownvote = () => {
-    if (isDownvoted) {
-      deleteVoteMutation.mutate();
-      return;
-    }
-
-    if (isUpvoted) {
-      updateVoteMutation.mutate('Downvote');
-      return;
-    }
-
-    createVoteMutation.mutate('Downvote');
-  };
+  const {
+    title,
+    description,
+    rating,
+    userName,
+    userProfilePictureUrl,
+    upvotes,
+    downvotes,
+    dateCreated,
+    userVote,
+    isAuthenticated,
+    onClickUpvote,
+    onClickDownvote,
+  } = props;
 
   return (
     <Box>
       <Grid container spacing={2}>
         <Grid item xs={12} sm>
-          <Rating value={review.rating} precision={0.5} readOnly />
+          <Rating value={rating} precision={0.5} readOnly />
           <Typography variant="h6" component="h3">
-            {review.title}
+            {title}
           </Typography>
         </Grid>
         <Grid item xs={12} sm="auto">
@@ -121,28 +62,34 @@ function ReviewListItem(props: ReviewListItemProps) {
               <Tooltip title={isAuthenticated ? '' : 'Login to vote'}>
                 <span>
                   <IconButton
+                    aria-label="upvote"
                     size="small"
-                    onClick={handleClickUpvote}
+                    onClick={() => onClickUpvote?.()}
                     disabled={!isAuthenticated}
                   >
-                    {isUpvoted ? <ThumbUpIcon /> : <ThumbUpOutlinedIcon />}
+                    {userVote === 'Upvote' ? (
+                      <ThumbUpIcon aria-label="upvoted" />
+                    ) : (
+                      <ThumbUpOutlinedIcon />
+                    )}
                   </IconButton>
                 </span>
               </Tooltip>
               <Typography variant="subtitle2" component="span">
-                ({review.upvotes})
+                ({upvotes})
               </Typography>
             </Grid>
             <Grid item>
               <Tooltip title={isAuthenticated ? '' : 'Login to vote'}>
                 <span>
                   <IconButton
+                    aria-label="downvote"
                     size="small"
-                    onClick={handleClickDownvote}
+                    onClick={onClickDownvote}
                     disabled={!isAuthenticated}
                   >
-                    {isDownvoted ? (
-                      <ThumbDownIcon />
+                    {userVote === 'Downvote' ? (
+                      <ThumbDownIcon aria-label="downvoted" />
                     ) : (
                       <ThumbDownOutlinedIcon />
                     )}
@@ -150,7 +97,7 @@ function ReviewListItem(props: ReviewListItemProps) {
                 </span>
               </Tooltip>
               <Typography variant="subtitle2" component="span">
-                ({review.downvotes})
+                ({downvotes})
               </Typography>
             </Grid>
           </Grid>
@@ -158,17 +105,15 @@ function ReviewListItem(props: ReviewListItemProps) {
         <Grid item xs={12}>
           <Grid container spacing={1}>
             <Grid item>
-              <Avatar src={review.userProfilePictureUrl}>
-                {review.userName[0]}
-              </Avatar>
+              <Avatar src={userProfilePictureUrl}>{userName[0]}</Avatar>
             </Grid>
             <Grid item>
-              <div>{review.userName}</div>
-              <TimeAgo date={review.dateCreated} />
+              <div>{userName}</div>
+              <TimeAgo date={dateCreated} />
             </Grid>
           </Grid>
         </Grid>
-        <Grid item>{review.description}</Grid>
+        <Grid item>{description}</Grid>
       </Grid>
       <Box marginBottom={2} marginTop={2}>
         <Divider />
@@ -178,3 +123,4 @@ function ReviewListItem(props: ReviewListItemProps) {
 }
 
 export default ReviewListItem;
+export type { ReviewListItemProps };
